@@ -10,7 +10,7 @@ class ProductCreate(BaseModel):
     name: str = Field(min_length=1, max_length=200)
     sku: str = Field(min_length=1, max_length=64)
     category_id: Optional[int] = None
-    unit_of_measure: str = Field(min_length=1, max_length=20)
+    unit_of_measure: str = Field(default="Units", min_length=1, max_length=20)
     reorder_point: float = Field(ge=0, default=0)
     reorder_qty: float = Field(ge=0, default=0)
     initial_stock: List[InitialStockItem] = Field(default_factory=list)

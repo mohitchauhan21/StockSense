@@ -1,27 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api';
-import { Package, Plus, Search, RefreshCw, X } from 'lucide-react';
+import { Package, Plus, Search, RefreshCw, X, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 export default function ProductsView({ showLowStockOnly }) {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  // Form State
+  // Form State matching ProductCreate schema exactly
   const [sku, setSku] = useState('');
   const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [unitCost, setUnitCost] = useState('');
-  const [minReorderPoint, setMinReorderPoint] = useState('10');
+  const [categoryId, setCategoryId] = useState('');
+  const [unitOfMeasure, setUnitOfMeasure] = useState('Units');
+  const [reorderPoint, setReorderPoint] = useState('10');
+  const [reorderQty, setReorderQty] = useState('50');
   const [creating, setCreating] = useState(false);
   const [formErr, setFormErr] = useState(null);
 
-  const loadProducts = async () => {
+  const loadData = async () => {
     setLoading(true);
     try {
-      const res = await api.getProducts();
-      setProducts(res || []);
+      const [pRes, cRes] = await Promise.all([
+        api.getProducts().catch(() => []),
+        api.getCategories().catch(() => []),
+      ]);
+      setProducts(pRes || []);
+      setCategories(cRes || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -30,7 +36,7 @@ export default function ProductsView({ showLowStockOnly }) {
   };
 
   useEffect(() => {
-    loadProducts();
+    loadData();
   }, []);
 
   const handleCreateProduct = async (e) => {
@@ -41,16 +47,19 @@ export default function ProductsView({ showLowStockOnly }) {
       await api.createProduct({
         sku,
         name,
-        description,
-        unit_cost: parseFloat(unitCost) || 0,
-        min_reorder_point: parseInt(minReorderPoint) || 0,
+        category_id: categoryId ? parseInt(categoryId) : null,
+        unit_of_measure: unitOfMeasure || 'Units',
+        reorder_point: parseFloat(reorderPoint) || 0,
+        reorder_qty: parseFloat(reorderQty) || 0,
       });
       setShowModal(false);
       setSku('');
       setName('');
-      setDescription('');
-      setUnitCost('');
-      loadProducts();
+      setCategoryId('');
+      setUnitOfMeasure('Units');
+      setReorderPoint('10');
+      setReorderQty('50');
+      loadData();
     } catch (err) {
       setFormErr(err.message);
     } finally {
@@ -60,7 +69,10 @@ export default function ProductsView({ showLowStockOnly }) {
 
   const filteredProducts = products.filter((p) => {
     const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.sku.toLowerCase().includes(search.toLowerCase());
-    const matchesLowStock = !showLowStockOnly || (p.current_stock !== undefined && p.current_stock <= p.min_reorder_point);
+    const stockVal = p.current_stock ?? p.total_quantity ?? 0;
+    const reorderVal = p.reorder_point ?? 0;
+    const isLow = stockVal <= reorderVal;
+    const matchesLowStock = !showLowStockOnly || isLow;
     return matchesSearch && matchesLowStock;
   });
 
@@ -71,11 +83,11 @@ export default function ProductsView({ showLowStockOnly }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <h2 className="heading-xl">Product Catalog</h2>
-          <p className="body-text">Master items list, current stock balances & reorder configuration.</p>
+          <p className="body-text">Master items list, current stock balances & minimum reorder limits.</p>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button className="btn-odoo-secondary" onClick={loadProducts} style={{ padding: '8px 14px', fontSize: '13px' }}>
+          <button className="btn-odoo-secondary" onClick={loadData} style={{ padding: '8px 14px', fontSize: '13px' }}>
             <RefreshCw size={14} className={loading ? 'spin' : ''} /> Refresh
           </button>
 
@@ -113,9 +125,9 @@ export default function ProductsView({ showLowStockOnly }) {
               <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid var(--color-border)', color: 'var(--color-text-heading)' }}>
                 <th style={{ padding: '14px 18px' }}>SKU</th>
                 <th style={{ padding: '14px 18px' }}>Product Name</th>
-                <th style={{ padding: '14px 18px' }}>Unit Cost</th>
+                <th style={{ padding: '14px 18px' }}>Unit of Measure</th>
                 <th style={{ padding: '14px 18px' }}>Stock Balance</th>
-                <th style={{ padding: '14px 18px' }}>Reorder Point</th>
+                <th style={{ padding: '14px 18px' }}>Reorder Threshold</th>
                 <th style={{ padding: '14px 18px' }}>Status</th>
               </tr>
             </thead>
@@ -134,7 +146,9 @@ export default function ProductsView({ showLowStockOnly }) {
                 </tr>
               ) : (
                 filteredProducts.map((p) => {
-                  const isLow = p.current_stock !== undefined && p.current_stock <= p.min_reorder_point;
+                  const stockVal = p.current_stock ?? p.total_quantity ?? 0;
+                  const reorderVal = p.reorder_point ?? 0;
+                  const isLow = stockVal <= reorderVal;
                   return (
                     <tr key={p.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                       <td style={{ padding: '14px 18px', fontFamily: 'var(--font-mono)', fontWeight: '600', color: 'var(--color-primary)' }}>
@@ -142,25 +156,24 @@ export default function ProductsView({ showLowStockOnly }) {
                       </td>
                       <td style={{ padding: '14px 18px', fontWeight: '600', color: 'var(--color-text-heading)' }}>
                         <div>{p.name}</div>
-                        {p.description && <div style={{ fontSize: '12px', color: 'var(--color-text-body)', fontWeight: '400' }}>{p.description}</div>}
                       </td>
-                      <td style={{ padding: '14px 18px', fontWeight: '500' }}>
-                        ₹{parseFloat(p.unit_cost || 0).toFixed(2)}
+                      <td style={{ padding: '14px 18px', color: 'var(--color-text-body)', fontWeight: '500' }}>
+                        {p.unit_of_measure || 'Units'}
                       </td>
                       <td style={{ padding: '14px 18px', fontWeight: '700', fontSize: '15px', color: isLow ? 'var(--color-accent-coral)' : 'var(--color-text-heading)' }}>
-                        {p.current_stock !== undefined ? p.current_stock : 0} units
+                        {stockVal} {p.unit_of_measure || 'units'}
                       </td>
                       <td style={{ padding: '14px 18px', color: 'var(--color-text-body)' }}>
-                        {p.min_reorder_point} units
+                        Min: {reorderVal} | Qty: {p.reorder_qty ?? 0}
                       </td>
                       <td style={{ padding: '14px 18px' }}>
                         {isLow ? (
-                          <span style={{ fontSize: '11px', fontWeight: '700', backgroundColor: '#FEE2E2', color: '#991B1B', padding: '4px 8px', borderRadius: '6px' }}>
-                            LOW STOCK
+                          <span style={{ fontSize: '11px', fontWeight: '700', backgroundColor: '#FEE2E2', color: '#991B1B', padding: '4px 8px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <AlertTriangle size={12} /> REORDER NEEDED
                           </span>
                         ) : (
-                          <span style={{ fontSize: '11px', fontWeight: '700', backgroundColor: '#DCFCE7', color: '#15803D', padding: '4px 8px', borderRadius: '6px' }}>
-                            IN STOCK
+                          <span style={{ fontSize: '11px', fontWeight: '700', backgroundColor: '#DCFCE7', color: '#15803D', padding: '4px 8px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <CheckCircle2 size={12} /> IN STOCK
                           </span>
                         )}
                       </td>
@@ -185,7 +198,7 @@ export default function ProductsView({ showLowStockOnly }) {
           zIndex: 1000,
           padding: '24px'
         }}>
-          <div className="odoo-card" style={{ width: '100%', maxWidth: '500px', position: 'relative' }}>
+          <div className="odoo-card" style={{ width: '100%', maxWidth: '520px', position: 'relative' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
               <h3 className="heading-lg" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Package color="var(--color-primary)" size={22} /> Add New Product
@@ -196,8 +209,8 @@ export default function ProductsView({ showLowStockOnly }) {
             </div>
 
             {formErr && (
-              <div style={{ backgroundColor: '#FEF2F2', color: '#991B1B', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>
-                {formErr}
+              <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FCA5A5', color: '#991B1B', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>
+                ⚠️ {formErr}
               </div>
             )}
 
@@ -226,38 +239,61 @@ export default function ProductsView({ showLowStockOnly }) {
                 />
               </div>
 
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Description</label>
-                <textarea
-                  className="odoo-input"
-                  rows="2"
-                  placeholder="Optional specifications or category details..."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Category</label>
+                  <select
+                    className="odoo-input"
+                    value={categoryId}
+                    onChange={(e) => setCategoryId(e.target.value)}
+                  >
+                    <option value="">Select Category...</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Unit of Measure</label>
+                  <select
+                    className="odoo-input"
+                    value={unitOfMeasure}
+                    onChange={(e) => setUnitOfMeasure(e.target.value)}
+                  >
+                    <option value="Units">Units (pcs)</option>
+                    <option value="kg">Kilograms (kg)</option>
+                    <option value="Boxes">Boxes</option>
+                    <option value="Liters">Liters</option>
+                    <option value="Meters">Meters</option>
+                  </select>
+                </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Unit Cost (₹)</label>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Min Reorder Point</label>
                   <input
                     type="number"
-                    step="0.01"
+                    min="0"
                     className="odoo-input"
-                    placeholder="0.00"
-                    value={unitCost}
-                    onChange={(e) => setUnitCost(e.target.value)}
+                    placeholder="10"
+                    value={reorderPoint}
+                    onChange={(e) => setReorderPoint(e.target.value)}
                   />
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Min Reorder Point</label>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Standard Reorder Qty</label>
                   <input
                     type="number"
+                    min="0"
                     className="odoo-input"
-                    placeholder="10"
-                    value={minReorderPoint}
-                    onChange={(e) => setMinReorderPoint(e.target.value)}
+                    placeholder="50"
+                    value={reorderQty}
+                    onChange={(e) => setReorderQty(e.target.value)}
                   />
                 </div>
               </div>
