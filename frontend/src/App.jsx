@@ -14,11 +14,17 @@ import WarehousesView from './components/WarehousesView';
 import CategoriesView from './components/CategoriesView';
 import TestimonialSection from './components/TestimonialSection';
 import FloatingHelpModal from './components/FloatingHelpModal';
+import SignInModal from './components/SignInModal';
+import AdvisorModal from './components/AdvisorModal';
 
 export default function App() {
   const [viewMode, setViewMode] = useState('landing'); // 'landing' | 'app'
   const [activeModule, setActiveModule] = useState('dashboard');
   const [showLowStockOnly, setShowLowStockOnly] = useState(false);
+
+  // Modals state
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
+  const [isAdvisorOpen, setIsAdvisorOpen] = useState(false);
 
   const handleLaunchApp = (modId = 'dashboard') => {
     setActiveModule(modId);
@@ -89,6 +95,18 @@ export default function App() {
             )}
           </main>
 
+          {/* Modals */}
+          <SignInModal
+            isOpen={isSignInOpen}
+            onClose={() => setIsSignInOpen(false)}
+            onSuccess={() => handleLaunchApp('dashboard')}
+          />
+
+          <AdvisorModal
+            isOpen={isAdvisorOpen}
+            onClose={() => setIsAdvisorOpen(false)}
+          />
+
           {/* Floating Action Help Chat */}
           <FloatingHelpModal />
         </div>
@@ -104,11 +122,13 @@ export default function App() {
       <HeaderNav 
         activeModule={activeModule} 
         onSelectModule={(mod) => handleLaunchApp(mod === 'hero' ? 'dashboard' : mod)} 
+        onOpenSignIn={() => setIsSignInOpen(true)}
       />
 
       {/* Hero Display Section */}
       <OdooHero 
         onStart={() => handleLaunchApp('dashboard')} 
+        onOpenAdvisor={() => setIsAdvisorOpen(true)}
       />
 
       {/* Features Showcase Cards Section */}
@@ -179,6 +199,18 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Modals */}
+      <SignInModal
+        isOpen={isSignInOpen}
+        onClose={() => setIsSignInOpen(false)}
+        onSuccess={() => handleLaunchApp('dashboard')}
+      />
+
+      <AdvisorModal
+        isOpen={isAdvisorOpen}
+        onClose={() => setIsAdvisorOpen(false)}
+      />
 
       {/* Floating Action Button Chat */}
       <FloatingHelpModal />

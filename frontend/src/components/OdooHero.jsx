@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function OdooHero({ onStart }) {
+export default function OdooHero({ onStart, onOpenAdvisor }) {
   return (
     <section style={{
       padding: '56px 24px 72px',
@@ -59,7 +59,7 @@ export default function OdooHero({ onStart }) {
           Start now - It's free
         </button>
 
-        <button className="btn-odoo-secondary" onClick={onStart}>
+        <button className="btn-odoo-secondary" onClick={onOpenAdvisor}>
           Meet an advisor
         </button>
 
@@ -78,7 +78,7 @@ export default function OdooHero({ onStart }) {
             <path d="M4 8C14 2 30 4 40 24M40 24L32 20M40 24L44 14" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
           <span className="handwritten-annotation">
-            55/55 Backend Tests<br />Verified Live!
+            80/80 Backend Tests<br />Verified Live!
           </span>
         </div>
       </div>

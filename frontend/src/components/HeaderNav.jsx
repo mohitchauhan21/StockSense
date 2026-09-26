@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function HeaderNav({ activeModule, onSelectModule }) {
+export default function HeaderNav({ activeModule, onSelectModule, onOpenSignIn }) {
   return (
     <header style={{
       height: '72px',
@@ -49,14 +49,19 @@ export default function HeaderNav({ activeModule, onSelectModule }) {
 
         {/* Center Nav Links */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-          {['Apps', 'Modules', 'Ledger', 'Pricing', 'Docs'].map((link) => (
+          {[
+            { label: 'Apps', action: () => onSelectModule('dashboard') },
+            { label: 'Modules', action: () => onSelectModule('products') },
+            { label: 'Ledger', action: () => onSelectModule('ledger') },
+            { label: 'Warehouses', action: () => onSelectModule('warehouses') },
+            { label: 'Docs', action: () => window.open('/docs', '_blank') },
+          ].map((item) => (
             <a
-              key={link}
-              href={`#${link.toLowerCase()}`}
+              key={item.label}
+              href={`#${item.label.toLowerCase()}`}
               onClick={(e) => {
                 e.preventDefault();
-                if (link === 'Apps' || link === 'Modules') onSelectModule('dashboard');
-                if (link === 'Ledger') onSelectModule('ledger');
+                item.action();
               }}
               style={{
                 color: 'var(--color-text-body)',
@@ -68,7 +73,7 @@ export default function HeaderNav({ activeModule, onSelectModule }) {
               onMouseEnter={(e) => e.target.style.color = 'var(--color-text-heading)'}
               onMouseLeave={(e) => e.target.style.color = 'var(--color-text-body)'}
             >
-              {link}
+              {item.label}
             </a>
           ))}
         </nav>
@@ -76,18 +81,22 @@ export default function HeaderNav({ activeModule, onSelectModule }) {
 
       {/* Right Actions */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <a
-          href="#signin"
-          onClick={(e) => e.preventDefault()}
+        <button
+          onClick={onOpenSignIn}
           style={{
+            background: 'none',
+            border: 'none',
             color: 'var(--color-text-body)',
-            fontWeight: '500',
+            fontWeight: '600',
             fontSize: '14px',
-            textDecoration: 'none'
+            cursor: 'pointer',
+            padding: '6px 12px'
           }}
+          onMouseEnter={(e) => e.target.style.color = 'var(--color-primary)'}
+          onMouseLeave={(e) => e.target.style.color = 'var(--color-text-body)'}
         >
           Sign in
-        </a>
+        </button>
 
         {/* CTA Button with Live Sync Indicator Dot */}
         <button
