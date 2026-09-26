@@ -83,37 +83,40 @@ export default function TransfersView() {
   };
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px' }}>
+    <div className="app-screen-container">
       
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+      <div className="app-screen-header">
         <div>
-          <h2 className="heading-xl">Internal Stock Transfers</h2>
+          <h2 className="heading-xl" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <ArrowLeftRight size={24} color="var(--color-primary-blue)" />
+            Internal Stock Transfers
+          </h2>
           <p className="body-text">Warehouse-to-warehouse stock relocations with atomic balance updates.</p>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button className="btn-odoo-secondary" onClick={loadData} style={{ padding: '8px 14px', fontSize: '13px' }}>
+          <button className="btn-secondary" onClick={loadData}>
             <RefreshCw size={14} className={loading ? 'spin' : ''} /> Refresh
           </button>
-          <button className="btn-odoo-primary" onClick={() => setShowModal(true)}>
+          <button className="btn-primary" onClick={() => setShowModal(true)}>
             <Plus size={16} /> Create Transfer
           </button>
         </div>
       </div>
 
       {/* Table Card */}
-      <div className="odoo-card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div className="app-table-container" style={{ marginBottom: '24px' }}>
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
+          <table className="app-table">
             <thead>
-              <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid var(--color-border)', color: 'var(--color-text-heading)' }}>
-                <th style={{ padding: '14px 18px' }}>Reference #</th>
-                <th style={{ padding: '14px 18px' }}>Source Warehouse</th>
-                <th style={{ padding: '14px 18px' }}>Destination Warehouse</th>
-                <th style={{ padding: '14px 18px' }}>Items Total</th>
-                <th style={{ padding: '14px 18px' }}>Status</th>
-                <th style={{ padding: '14px 18px', textAlign: 'right' }}>Action</th>
+              <tr>
+                <th>Reference #</th>
+                <th>Source Warehouse</th>
+                <th>Destination Warehouse</th>
+                <th>Items Total</th>
+                <th>Status</th>
+                <th style={{ textAlign: 'right' }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -134,7 +137,7 @@ export default function TransfersView() {
                   const isDone = t.status === 'DONE' || t.status === 'VALIDATED';
                   return (
                     <tr key={t.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                      <td style={{ padding: '14px 18px', fontFamily: 'var(--font-mono)', fontWeight: '600', color: '#2563EB' }}>
+                      <td style={{ padding: '14px 18px', fontFamily: 'var(--font-mono)', fontWeight: '600', color: 'var(--color-primary-blue)' }}>
                         {t.reference_number || `TRF-${t.id}`}
                       </td>
                       <td style={{ padding: '14px 18px', color: 'var(--color-text-heading)', fontWeight: '500' }}>
@@ -148,28 +151,27 @@ export default function TransfersView() {
                       </td>
                       <td style={{ padding: '14px 18px' }}>
                         {isDone ? (
-                          <span style={{ fontSize: '11px', fontWeight: '700', backgroundColor: '#DCFCE7', color: '#15803D', padding: '4px 8px', borderRadius: '6px' }}>
-                            DONE
+                          <span className="status-pill status-pill-success">
+                            <span className="status-dot"></span> Transferred
                           </span>
                         ) : (
-                          <span style={{ fontSize: '11px', fontWeight: '700', backgroundColor: '#FEF3C7', color: '#B45309', padding: '4px 8px', borderRadius: '6px' }}>
-                            DRAFT / READY
+                          <span className="status-pill status-pill-warning">
+                            <span className="status-dot"></span> Draft / Ready
                           </span>
                         )}
                       </td>
                       <td style={{ padding: '14px 18px', textAlign: 'right' }}>
                         {!isDone && (
                           <button
-                            className="btn-odoo-primary"
+                            className="btn-primary btn-sm"
                             onClick={() => handleValidate(t.id)}
-                            style={{ padding: '6px 12px', fontSize: '12px', backgroundColor: '#2563EB' }}
                           >
-                            <CheckCircle size={12} /> Validate & Transfer
+                            <CheckCircle size={14} /> Validate & Transfer
                           </button>
                         )}
                         {isDone && (
-                          <span style={{ fontSize: '12px', color: '#15803D', fontWeight: '600' }}>
-                            ✓ Transferred & Synced
+                          <span style={{ fontSize: '13px', color: '#16A34A', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <CheckCircle size={14} /> Transferred & Synced
                           </span>
                         )}
                       </td>
@@ -187,25 +189,32 @@ export default function TransfersView() {
         <div style={{
           position: 'fixed',
           inset: 0,
-          backgroundColor: 'rgba(27, 27, 47, 0.5)',
+          backgroundColor: 'rgba(15, 23, 42, 0.6)',
+          backdropFilter: 'blur(3px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 1000,
           padding: '24px'
         }}>
-          <div className="odoo-card" style={{ width: '100%', maxWidth: '500px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h3 className="heading-lg" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <ArrowLeftRight color="#2563EB" size={22} /> Create Internal Transfer
+          <div className="app-card" style={{ width: '100%', maxWidth: '520px', boxShadow: 'var(--shadow-elevation)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', paddingBottom: '14px', borderBottom: '1px solid var(--color-border)' }}>
+              <h3 className="heading-lg" style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: '18px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', backgroundColor: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary-blue)' }}>
+                  <ArrowLeftRight size={18} />
+                </div>
+                Create Internal Transfer
               </h3>
-              <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                <X size={20} color="var(--color-text-body)" />
+              <button 
+                onClick={() => setShowModal(false)} 
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-body)' }}
+              >
+                <X size={20} />
               </button>
             </div>
 
             {formErr && (
-              <div style={{ backgroundColor: '#FEF2F2', color: '#991B1B', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>
+              <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA', color: '#991B1B', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>
                 {formErr}
               </div>
             )}
@@ -213,10 +222,10 @@ export default function TransfersView() {
             <form onSubmit={handleCreateTransfer} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Source Warehouse *</label>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Source Warehouse *</label>
                   <select
                     required
-                    className="odoo-input"
+                    className="app-input"
                     value={sourceId}
                     onChange={(e) => setSourceId(e.target.value)}
                   >
@@ -229,10 +238,10 @@ export default function TransfersView() {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Destination Warehouse *</label>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Destination Warehouse *</label>
                   <select
                     required
-                    className="odoo-input"
+                    className="app-input"
                     value={destId}
                     onChange={(e) => setDestId(e.target.value)}
                   >
@@ -247,10 +256,10 @@ export default function TransfersView() {
 
               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Select Product *</label>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Select Product *</label>
                   <select
                     required
-                    className="odoo-input"
+                    className="app-input"
                     value={productId}
                     onChange={(e) => setProductId(e.target.value)}
                   >
@@ -263,23 +272,23 @@ export default function TransfersView() {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Quantity *</label>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Quantity *</label>
                   <input
                     type="number"
                     required
                     min="1"
-                    className="odoo-input"
+                    className="app-input"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                   />
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
-                <button type="button" className="btn-odoo-secondary" onClick={() => setShowModal(false)}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px', paddingTop: '16px', borderTop: '1px solid var(--color-border)' }}>
+                <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn-odoo-primary" disabled={creating} style={{ backgroundColor: '#2563EB' }}>
+                <button type="submit" className="btn-primary" disabled={creating}>
                   {creating ? 'Creating...' : 'Create Transfer Draft'}
                 </button>
               </div>

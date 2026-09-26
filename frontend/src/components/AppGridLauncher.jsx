@@ -97,6 +97,7 @@ export default function AppGridLauncher({ activeModule, onSelectModule, showLowS
                 className={`app-tile-wrapper ${isActive ? 'active' : ''}`}
                 onClick={() => onSelectModule(mod.id)}
                 title={mod.desc}
+                aria-current={isActive ? 'true' : undefined}
               >
                 <div className="app-tile">
                   <IconComp 
@@ -110,7 +111,10 @@ export default function AppGridLauncher({ activeModule, onSelectModule, showLowS
                   <div className="app-tile-header">
                     <span className="app-tile-label">{mod.label}</span>
                     {isActive && (
-                      <span className="app-tile-active-badge">Active</span>
+                      <span className="app-tile-active-badge">
+                        <span className="status-dot live" style={{ width: 5, height: 5 }} />
+                        Active
+                      </span>
                     )}
                   </div>
                   <span className="app-tile-sub">{mod.sub}</span>

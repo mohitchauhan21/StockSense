@@ -50,20 +50,23 @@ export default function CategoriesView() {
   };
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px' }}>
+    <div className="app-screen-container">
       
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+      <div className="app-screen-header">
         <div>
-          <h2 className="heading-xl">Product Categories</h2>
+          <h2 className="heading-xl" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <FolderTree size={24} color="var(--color-primary-blue)" />
+            Product Categories
+          </h2>
           <p className="body-text">Taxonomy structure & parent-child category hierarchies.</p>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button className="btn-odoo-secondary" onClick={loadCategories} style={{ padding: '8px 14px', fontSize: '13px' }}>
+          <button className="btn-secondary" onClick={loadCategories}>
             <RefreshCw size={14} className={loading ? 'spin' : ''} /> Refresh
           </button>
-          <button className="btn-odoo-primary" onClick={() => setShowModal(true)}>
+          <button className="btn-primary" onClick={() => setShowModal(true)}>
             <Plus size={16} /> Add Category
           </button>
         </div>
@@ -72,7 +75,7 @@ export default function CategoriesView() {
       {/* Grid of Categories */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
         gap: '20px'
       }}>
         {loading ? (
@@ -80,31 +83,43 @@ export default function CategoriesView() {
             Loading categories...
           </div>
         ) : categories.length === 0 ? (
-          <div style={{ gridColumn: '1 / -1', padding: '32px', textAlign: 'center', color: 'var(--color-text-body)' }}>
-            No categories created yet. Click "+ Add Category" to create one.
+          <div className="app-card" style={{ gridColumn: '1 / -1', padding: '48px 24px', textAlign: 'center' }}>
+            <div className="stat-card-icon-wrap" style={{ margin: '0 auto 16px auto', width: '48px', height: '48px' }}>
+              <FolderTree size={24} />
+            </div>
+            <h3 className="heading-md" style={{ marginBottom: '8px' }}>No categories created yet</h3>
+            <p className="body-text" style={{ maxWidth: '400px', margin: '0 auto 20px auto' }}>
+              Define product categories and taxonomy groups to organize your inventory.
+            </p>
+            <button className="btn-primary" onClick={() => setShowModal(true)}>
+              <Plus size={16} /> Add First Category
+            </button>
           </div>
         ) : (
           categories.map((c) => (
-            <div key={c.id} className="odoo-card" style={{ borderLeft: '4px solid var(--color-accent-teal)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <div key={c.id} className="app-card app-card-interactive" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '12px',
+                  fontSize: '11px',
                   fontWeight: '700',
-                  backgroundColor: '#E6FFFA',
-                  color: '#047857',
-                  padding: '4px 8px',
+                  backgroundColor: '#F1F5F9',
+                  color: 'var(--color-text-body)',
+                  border: '1px solid var(--color-border)',
+                  padding: '3px 8px',
                   borderRadius: '6px'
                 }}>
-                  ID #{c.id}
+                  CAT #{c.id}
                 </span>
-                <FolderTree size={20} color="var(--color-accent-teal)" />
+                <div className="stat-card-icon-wrap" style={{ width: '36px', height: '36px' }}>
+                  <FolderTree size={18} />
+                </div>
               </div>
 
-              <h3 className="heading-md" style={{ marginBottom: '6px' }}>{c.name}</h3>
+              <h3 className="heading-md" style={{ margin: '4px 0 0 0', fontSize: '16px' }}>{c.name}</h3>
 
               {c.parent_id && (
-                <div style={{ fontSize: '13px', color: 'var(--color-text-body)', marginTop: '4px' }}>
+                <div style={{ fontSize: '13px', color: 'var(--color-text-body)', marginTop: '2px' }}>
                   Parent Category ID: #{c.parent_id}
                 </div>
               )}
@@ -118,36 +133,43 @@ export default function CategoriesView() {
         <div style={{
           position: 'fixed',
           inset: 0,
-          backgroundColor: 'rgba(27, 27, 47, 0.5)',
+          backgroundColor: 'rgba(15, 23, 42, 0.6)',
+          backdropFilter: 'blur(3px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 1000,
           padding: '24px'
         }}>
-          <div className="odoo-card" style={{ width: '100%', maxWidth: '500px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h3 className="heading-lg" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FolderTree color="var(--color-accent-teal)" size={22} /> Add Product Category
+          <div className="app-card" style={{ width: '100%', maxWidth: '500px', boxShadow: 'var(--shadow-elevation)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', paddingBottom: '14px', borderBottom: '1px solid var(--color-border)' }}>
+              <h3 className="heading-lg" style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: '18px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', backgroundColor: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary-blue)' }}>
+                  <FolderTree size={18} />
+                </div>
+                Add Product Category
               </h3>
-              <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                <X size={20} color="var(--color-text-body)" />
+              <button 
+                onClick={() => setShowModal(false)} 
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-body)' }}
+              >
+                <X size={20} />
               </button>
             </div>
 
             {formErr && (
-              <div style={{ backgroundColor: '#FEF2F2', color: '#991B1B', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>
+              <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA', color: '#991B1B', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>
                 {formErr}
               </div>
             )}
 
             <form onSubmit={handleCreateCategory} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Category Name *</label>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Category Name *</label>
                 <input
                   type="text"
                   required
-                  className="odoo-input"
+                  className="app-input"
                   placeholder="e.g. Electronics or Raw Materials"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -155,9 +177,9 @@ export default function CategoriesView() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Parent Category (Optional)</label>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Parent Category (Optional)</label>
                 <select
-                  className="odoo-input"
+                  className="app-input"
                   value={parentId}
                   onChange={(e) => setParentId(e.target.value)}
                 >
@@ -170,11 +192,11 @@ export default function CategoriesView() {
                 </select>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
-                <button type="button" className="btn-odoo-secondary" onClick={() => setShowModal(false)}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px', paddingTop: '16px', borderTop: '1px solid var(--color-border)' }}>
+                <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn-odoo-primary" disabled={creating} style={{ backgroundColor: 'var(--color-accent-teal)' }}>
+                <button type="submit" className="btn-primary" disabled={creating}>
                   {creating ? 'Saving...' : 'Save Category'}
                 </button>
               </div>

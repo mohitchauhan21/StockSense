@@ -80,37 +80,37 @@ export default function DeliveriesView() {
   };
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px' }}>
+    <div className="app-screen-container">
       
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+      <div className="app-screen-header">
         <div>
           <h2 className="heading-xl">Delivery Orders (Sales Out)</h2>
           <p className="body-text">Customer fulfillment & outgoing stock dispatch from warehouses.</p>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button className="btn-odoo-secondary" onClick={loadData} style={{ padding: '8px 14px', fontSize: '13px' }}>
+          <button className="btn-secondary" onClick={loadData}>
             <RefreshCw size={14} className={loading ? 'spin' : ''} /> Refresh
           </button>
-          <button className="btn-odoo-primary" onClick={() => setShowModal(true)}>
+          <button className="btn-primary" onClick={() => setShowModal(true)}>
             <Plus size={16} /> Create Delivery
           </button>
         </div>
       </div>
 
       {/* Table Card */}
-      <div className="odoo-card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div className="app-table-container" style={{ marginBottom: '24px' }}>
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
+          <table className="app-table">
             <thead>
-              <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid var(--color-border)', color: 'var(--color-text-heading)' }}>
-                <th style={{ padding: '14px 18px' }}>Reference #</th>
-                <th style={{ padding: '14px 18px' }}>Customer</th>
-                <th style={{ padding: '14px 18px' }}>Source Warehouse</th>
-                <th style={{ padding: '14px 18px' }}>Items Total</th>
-                <th style={{ padding: '14px 18px' }}>Status</th>
-                <th style={{ padding: '14px 18px', textAlign: 'right' }}>Action</th>
+              <tr>
+                <th>Reference #</th>
+                <th>Customer</th>
+                <th>Source Warehouse</th>
+                <th>Items Total</th>
+                <th>Status</th>
+                <th style={{ textAlign: 'right' }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -143,13 +143,13 @@ export default function DeliveriesView() {
                       <td style={{ padding: '14px 18px', fontWeight: '600' }}>
                         {d.items ? d.items.reduce((acc, i) => acc + i.quantity, 0) : 0} units
                       </td>
-                      <td style={{ padding: '14px 18px' }}>
+                      <td>
                         {isDone ? (
-                          <span style={{ fontSize: '11px', fontWeight: '700', backgroundColor: '#DCFCE7', color: '#15803D', padding: '4px 8px', borderRadius: '6px' }}>
-                            DONE
+                          <span className="status-pill success">
+                            DELIVERED
                           </span>
                         ) : (
-                          <span style={{ fontSize: '11px', fontWeight: '700', backgroundColor: '#FEF3C7', color: '#B45309', padding: '4px 8px', borderRadius: '6px' }}>
+                          <span className="status-pill warning">
                             DRAFT / READY
                           </span>
                         )}
@@ -157,11 +157,10 @@ export default function DeliveriesView() {
                       <td style={{ padding: '14px 18px', textAlign: 'right' }}>
                         {!isDone && (
                           <button
-                            className="btn-odoo-primary"
+                            className="btn-primary btn-sm"
                             onClick={() => handleValidate(d.id)}
-                            style={{ padding: '6px 12px', fontSize: '12px', backgroundColor: 'var(--color-accent-coral)' }}
                           >
-                            <CheckCircle size={12} /> Validate & Dispatch
+                            <CheckCircle size={13} /> Validate & Dispatch
                           </button>
                         )}
                         {isDone && (
@@ -191,10 +190,10 @@ export default function DeliveriesView() {
           zIndex: 1000,
           padding: '24px'
         }}>
-          <div className="odoo-card" style={{ width: '100%', maxWidth: '500px' }}>
+          <div className="app-card" style={{ width: '100%', maxWidth: '500px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
               <h3 className="heading-lg" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Truck color="var(--color-accent-coral)" size={22} /> Create Delivery Order
+                <Truck color="var(--color-primary)" size={22} /> Create Delivery Order
               </h3>
               <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
                 <X size={20} color="var(--color-text-body)" />
@@ -212,7 +211,7 @@ export default function DeliveriesView() {
                 <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Customer Name</label>
                 <input
                   type="text"
-                  className="odoo-input"
+                  className="app-input"
                   placeholder="e.g. Global Tech Solutions"
                   value={customer}
                   onChange={(e) => setCustomer(e.target.value)}
@@ -223,7 +222,7 @@ export default function DeliveriesView() {
                 <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Source Warehouse *</label>
                 <select
                   required
-                  className="odoo-input"
+                  className="app-input"
                   value={sourceWarehouseId}
                   onChange={(e) => setSourceWarehouseId(e.target.value)}
                 >
@@ -240,7 +239,7 @@ export default function DeliveriesView() {
                   <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Select Product *</label>
                   <select
                     required
-                    className="odoo-input"
+                    className="app-input"
                     value={productId}
                     onChange={(e) => setProductId(e.target.value)}
                   >
@@ -258,7 +257,7 @@ export default function DeliveriesView() {
                     type="number"
                     required
                     min="1"
-                    className="odoo-input"
+                    className="app-input"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                   />
@@ -266,10 +265,10 @@ export default function DeliveriesView() {
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
-                <button type="button" className="btn-odoo-secondary" onClick={() => setShowModal(false)}>
+                <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn-odoo-primary" disabled={creating} style={{ backgroundColor: 'var(--color-accent-coral)' }}>
+                <button type="submit" className="btn-primary" disabled={creating}>
                   {creating ? 'Creating...' : 'Create Delivery Draft'}
                 </button>
               </div>

@@ -80,34 +80,34 @@ export default function ReceiptsView() {
   };
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px' }}>
+    <div className="app-screen-container">
       
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+      <div className="app-screen-header">
         <div>
           <h2 className="heading-xl">Incoming Receipts (GRN)</h2>
           <p className="body-text">Vendor purchase orders & incoming stock receipts into warehouses.</p>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button className="btn-odoo-secondary" onClick={loadData} style={{ padding: '8px 14px', fontSize: '13px' }}>
+          <button className="btn-secondary" onClick={loadData}>
             <RefreshCw size={14} className={loading ? 'spin' : ''} /> Refresh
           </button>
-          <button className="btn-odoo-primary" onClick={() => setShowModal(true)}>
+          <button className="btn-primary" onClick={() => setShowModal(true)}>
             <Plus size={16} /> Create Receipt
           </button>
         </div>
       </div>
 
       {/* Table Card */}
-      <div className="odoo-card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div className="app-table-container" style={{ marginBottom: '24px' }}>
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
+          <table className="app-table">
             <thead>
-              <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid var(--color-border)', color: 'var(--color-text-heading)' }}>
-                <th style={{ padding: '14px 18px' }}>Reference #</th>
-                <th style={{ padding: '14px 18px' }}>Vendor</th>
-                <th style={{ padding: '14px 18px' }}>Destination Warehouse</th>
+              <tr>
+                <th>Reference #</th>
+                <th>Vendor</th>
+                <th>Destination Warehouse</th>
                 <th style={{ padding: '14px 18px' }}>Items Total</th>
                 <th style={{ padding: '14px 18px' }}>Status</th>
                 <th style={{ padding: '14px 18px', textAlign: 'right' }}>Action</th>
@@ -143,13 +143,13 @@ export default function ReceiptsView() {
                       <td style={{ padding: '14px 18px', fontWeight: '600' }}>
                         {r.items ? r.items.reduce((acc, i) => acc + i.quantity, 0) : 0} units
                       </td>
-                      <td style={{ padding: '14px 18px' }}>
+                      <td>
                         {isDone ? (
-                          <span style={{ fontSize: '11px', fontWeight: '700', backgroundColor: '#DCFCE7', color: '#15803D', padding: '4px 8px', borderRadius: '6px' }}>
-                            DONE
+                          <span className="status-pill success">
+                            RECEIVED
                           </span>
                         ) : (
-                          <span style={{ fontSize: '11px', fontWeight: '700', backgroundColor: '#FEF3C7', color: '#B45309', padding: '4px 8px', borderRadius: '6px' }}>
+                          <span className="status-pill warning">
                             DRAFT / READY
                           </span>
                         )}
@@ -157,11 +157,10 @@ export default function ReceiptsView() {
                       <td style={{ padding: '14px 18px', textAlign: 'right' }}>
                         {!isDone && (
                           <button
-                            className="btn-odoo-primary"
+                            className="btn-primary btn-sm"
                             onClick={() => handleValidate(r.id)}
-                            style={{ padding: '6px 12px', fontSize: '12px' }}
                           >
-                            <CheckCircle size={12} /> Validate & Receive Stock
+                            <CheckCircle size={13} /> Validate & Receive Stock
                           </button>
                         )}
                         {isDone && (
@@ -191,7 +190,7 @@ export default function ReceiptsView() {
           zIndex: 1000,
           padding: '24px'
         }}>
-          <div className="odoo-card" style={{ width: '100%', maxWidth: '500px' }}>
+          <div className="app-card" style={{ width: '100%', maxWidth: '500px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
               <h3 className="heading-lg" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Download color="var(--color-primary)" size={22} /> Create Incoming Receipt
@@ -212,7 +211,7 @@ export default function ReceiptsView() {
                 <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Vendor / Supplier Name</label>
                 <input
                   type="text"
-                  className="odoo-input"
+                  className="app-input"
                   placeholder="e.g. Acme Tech Components Ltd."
                   value={vendor}
                   onChange={(e) => setVendor(e.target.value)}
@@ -223,7 +222,7 @@ export default function ReceiptsView() {
                 <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Destination Warehouse *</label>
                 <select
                   required
-                  className="odoo-input"
+                  className="app-input"
                   value={destWarehouseId}
                   onChange={(e) => setDestWarehouseId(e.target.value)}
                 >
@@ -240,7 +239,7 @@ export default function ReceiptsView() {
                   <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Select Product *</label>
                   <select
                     required
-                    className="odoo-input"
+                    className="app-input"
                     value={productId}
                     onChange={(e) => setProductId(e.target.value)}
                   >
@@ -258,7 +257,7 @@ export default function ReceiptsView() {
                     type="number"
                     required
                     min="1"
-                    className="odoo-input"
+                    className="app-input"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                   />
@@ -266,10 +265,10 @@ export default function ReceiptsView() {
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
-                <button type="button" className="btn-odoo-secondary" onClick={() => setShowModal(false)}>
+                <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn-odoo-primary" disabled={creating}>
+                <button type="submit" className="btn-primary" disabled={creating}>
                   {creating ? 'Creating...' : 'Create Receipt Draft'}
                 </button>
               </div>

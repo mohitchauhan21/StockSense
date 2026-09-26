@@ -23,13 +23,13 @@ export default function LedgerView() {
   }, []);
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px' }}>
+    <div className="app-screen-container">
       
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+      <div className="app-screen-header">
         <div>
           <h2 className="heading-xl" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <BookOpen size={28} color="var(--color-primary)" />
+            <BookOpen size={24} color="var(--color-primary-blue)" />
             Immutable Stock Move Ledger
           </h2>
           <p className="body-text">
@@ -38,31 +38,48 @@ export default function LedgerView() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button className="btn-odoo-secondary" onClick={loadLedger} style={{ padding: '8px 14px', fontSize: '13px' }}>
+          <button className="btn-secondary" onClick={loadLedger}>
             <RefreshCw size={14} className={loading ? 'spin' : ''} /> Refresh Ledger
           </button>
         </div>
       </div>
 
       {/* Ledger Audit Banner */}
-      <div style={{
-        backgroundColor: '#F0FDF4',
-        border: '1px solid #BBF7D0',
-        borderRadius: '12px',
-        padding: '16px 20px',
+      <div className="app-card" style={{
         marginBottom: '24px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '12px'
+        gap: '16px',
+        backgroundColor: '#F8FAFC',
+        border: '1px solid #E2E8F0',
+        padding: '16px 20px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <ShieldCheck size={24} color="#16A34A" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '10px',
+            backgroundColor: '#DCFCE7',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#15803D'
+          }}>
+            <ShieldCheck size={22} />
+          </div>
           <div>
-            <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#15803D' }}>Audit Ledger Integrity: PASS</h4>
-            <p style={{ fontSize: '13px', color: '#166534' }}>
-              All stock changes were mutated via the single uniform engine function `update_stock()`. No direct SQL balance updates allowed.
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-text-heading)', margin: 0 }}>
+                Audit Ledger Integrity: Verified
+              </h4>
+              <span className="status-pill status-pill-success" style={{ fontSize: '11px', padding: '2px 8px' }}>
+                <span className="status-dot"></span> Active Engine Guard
+              </span>
+            </div>
+            <p style={{ fontSize: '13px', color: 'var(--color-text-body)', margin: '4px 0 0 0' }}>
+              All balance transitions are executed strictly through atomic ledger mutations. Direct balance overwrite is locked.
             </p>
           </div>
         </div>
@@ -70,28 +87,29 @@ export default function LedgerView() {
           fontFamily: 'var(--font-mono)',
           fontSize: '13px',
           fontWeight: '700',
-          color: '#15803D',
-          backgroundColor: '#DCFCE7',
+          color: 'var(--color-primary-blue)',
+          backgroundColor: '#EFF6FF',
+          border: '1px solid #BFDBFE',
           padding: '6px 12px',
           borderRadius: '8px'
         }}>
-          Total Moves Recorded: {moves.length}
+          Total Moves: {moves.length}
         </span>
       </div>
 
       {/* Table Card */}
-      <div className="odoo-card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div className="app-table-container">
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
+          <table className="app-table">
             <thead>
-              <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid var(--color-border)', color: 'var(--color-text-heading)' }}>
-                <th style={{ padding: '14px 18px' }}>Move ID</th>
-                <th style={{ padding: '14px 18px' }}>Move Type</th>
-                <th style={{ padding: '14px 18px' }}>Product</th>
-                <th style={{ padding: '14px 18px' }}>Source / Dest Warehouse</th>
-                <th style={{ padding: '14px 18px' }}>Quantity Delta</th>
-                <th style={{ padding: '14px 18px' }}>Reference</th>
-                <th style={{ padding: '14px 18px' }}>Timestamp</th>
+              <tr>
+                <th>Move ID</th>
+                <th>Move Type</th>
+                <th>Product</th>
+                <th>Source / Dest Warehouse</th>
+                <th>Quantity Delta</th>
+                <th>Reference</th>
+                <th>Timestamp</th>
               </tr>
             </thead>
             <tbody>
@@ -116,18 +134,11 @@ export default function LedgerView() {
                         #{move.id}
                       </td>
                       <td style={{ padding: '14px 18px' }}>
-                        <span style={{
-                          fontSize: '11px',
-                          fontWeight: '700',
-                          padding: '4px 8px',
-                          borderRadius: '6px',
-                          backgroundColor: move.move_type === 'RECEIPT' ? '#DCFCE7' :
-                                           move.move_type === 'DELIVERY' ? '#FEE2E2' :
-                                           move.move_type === 'TRANSFER' ? '#DBEAFE' : '#F3E8FF',
-                          color: move.move_type === 'RECEIPT' ? '#15803D' :
-                                 move.move_type === 'DELIVERY' ? '#991B1B' :
-                                 move.move_type === 'TRANSFER' ? '#1E40AF' : '#6B21A8',
-                        }}>
+                        <span className={`status-pill ${
+                          move.move_type === 'RECEIPT' ? 'status-pill-success' :
+                          move.move_type === 'DELIVERY' ? 'status-pill-danger' :
+                          move.move_type === 'TRANSFER' ? 'status-pill-info' : 'status-pill-neutral'
+                        }`}>
                           {move.move_type}
                         </span>
                       </td>
@@ -137,7 +148,7 @@ export default function LedgerView() {
                       <td style={{ padding: '14px 18px', color: 'var(--color-text-body)' }}>
                         {move.warehouse?.name || `WH #${move.warehouse_id}`}
                       </td>
-                      <td style={{ padding: '14px 18px', fontWeight: '800', fontSize: '15px' }}>
+                      <td style={{ padding: '14px 18px', fontWeight: '700', fontSize: '14px' }}>
                         <span style={{
                           color: isPositive ? '#16A34A' : '#DC2626',
                           display: 'inline-flex',

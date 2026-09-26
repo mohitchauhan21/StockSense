@@ -136,7 +136,7 @@ export default function FloatingHelpModal() {
           }}>
             <input
               type="text"
-              className="odoo-input"
+              className="app-input"
               placeholder="Ask a question..."
               value={inputMsg}
               onChange={(e) => setInputMsg(e.target.value)}
@@ -144,8 +144,8 @@ export default function FloatingHelpModal() {
             />
             <button
               type="submit"
-              className="btn-pill-action"
-              style={{ padding: '8px 12px', borderRadius: '10px' }}
+              className="btn-primary btn-sm"
+              style={{ padding: '8px 12px' }}
             >
               <Send size={14} />
             </button>

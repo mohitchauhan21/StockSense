@@ -77,33 +77,33 @@ export default function ProductsView({ showLowStockOnly }) {
   });
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px' }}>
+    <div className="app-screen-container">
       
       {/* Action Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+      <div className="app-screen-header">
         <div>
           <h2 className="heading-xl">Product Catalog</h2>
           <p className="body-text">Master items list, current stock balances & minimum reorder limits.</p>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button className="btn-odoo-secondary" onClick={loadData} style={{ padding: '8px 14px', fontSize: '13px' }}>
+          <button className="btn-secondary" onClick={loadData}>
             <RefreshCw size={14} className={loading ? 'spin' : ''} /> Refresh
           </button>
 
-          <button className="btn-odoo-primary" onClick={() => setShowModal(true)}>
+          <button className="btn-primary" onClick={() => setShowModal(true)}>
             <Plus size={16} /> Add Product
           </button>
         </div>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="odoo-card" style={{ padding: '16px 20px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div className="app-card" style={{ padding: '16px 20px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
         <div style={{ position: 'relative', flex: 1 }}>
           <Search size={18} color="var(--color-text-body)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
           <input
             type="text"
-            className="odoo-input"
+            className="app-input"
             placeholder="Search by SKU or Product Name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -111,24 +111,24 @@ export default function ProductsView({ showLowStockOnly }) {
           />
         </div>
         {showLowStockOnly && (
-          <span style={{ fontSize: '13px', backgroundColor: '#FEF3C7', color: '#B45309', padding: '6px 12px', borderRadius: '8px', fontWeight: '600' }}>
+          <span className="status-pill warning">
             Filtering: Low Stock Only
           </span>
         )}
       </div>
 
       {/* Table Card */}
-      <div className="odoo-card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div className="app-table-container" style={{ marginBottom: '24px' }}>
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
+          <table className="app-table">
             <thead>
-              <tr style={{ backgroundColor: '#F8FAFC', borderBottom: '2px solid var(--color-border)', color: 'var(--color-text-heading)' }}>
-                <th style={{ padding: '14px 18px' }}>SKU</th>
-                <th style={{ padding: '14px 18px' }}>Product Name</th>
-                <th style={{ padding: '14px 18px' }}>Unit of Measure</th>
-                <th style={{ padding: '14px 18px' }}>Stock Balance</th>
-                <th style={{ padding: '14px 18px' }}>Reorder Threshold</th>
-                <th style={{ padding: '14px 18px' }}>Status</th>
+              <tr>
+                <th>SKU</th>
+                <th>Product Name</th>
+                <th>Unit of Measure</th>
+                <th>Stock Balance</th>
+                <th>Reorder Threshold</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -198,7 +198,7 @@ export default function ProductsView({ showLowStockOnly }) {
           zIndex: 1000,
           padding: '24px'
         }}>
-          <div className="odoo-card" style={{ width: '100%', maxWidth: '520px', position: 'relative' }}>
+          <div className="app-card" style={{ width: '100%', maxWidth: '520px', position: 'relative' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
               <h3 className="heading-lg" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Package color="var(--color-primary)" size={22} /> Add New Product
@@ -216,11 +216,11 @@ export default function ProductsView({ showLowStockOnly }) {
 
             <form onSubmit={handleCreateProduct} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>SKU (Unique Code) *</label>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>SKU (Unique Code) *</label>
                 <input
                   type="text"
                   required
-                  className="odoo-input"
+                  className="app-input"
                   placeholder="e.g. LAP-001 or MAC-M3"
                   value={sku}
                   onChange={(e) => setSku(e.target.value)}
@@ -228,11 +228,11 @@ export default function ProductsView({ showLowStockOnly }) {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Product Name *</label>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Product Name *</label>
                 <input
                   type="text"
                   required
-                  className="odoo-input"
+                  className="app-input"
                   placeholder="e.g. MacBook Pro M3 16-inch"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -241,9 +241,9 @@ export default function ProductsView({ showLowStockOnly }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Category</label>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Category</label>
                   <select
-                    className="odoo-input"
+                    className="app-input"
                     value={categoryId}
                     onChange={(e) => setCategoryId(e.target.value)}
                   >
@@ -257,9 +257,9 @@ export default function ProductsView({ showLowStockOnly }) {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Unit of Measure</label>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Unit of Measure</label>
                   <select
-                    className="odoo-input"
+                    className="app-input"
                     value={unitOfMeasure}
                     onChange={(e) => setUnitOfMeasure(e.target.value)}
                   >
@@ -274,11 +274,11 @@ export default function ProductsView({ showLowStockOnly }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Min Reorder Point</label>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Min Reorder Point</label>
                   <input
                     type="number"
                     min="0"
-                    className="odoo-input"
+                    className="app-input"
                     placeholder="10"
                     value={reorderPoint}
                     onChange={(e) => setReorderPoint(e.target.value)}
@@ -286,11 +286,11 @@ export default function ProductsView({ showLowStockOnly }) {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Standard Reorder Qty</label>
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--color-text-heading)' }}>Standard Reorder Qty</label>
                   <input
                     type="number"
                     min="0"
-                    className="odoo-input"
+                    className="app-input"
                     placeholder="50"
                     value={reorderQty}
                     onChange={(e) => setReorderQty(e.target.value)}
@@ -298,11 +298,11 @@ export default function ProductsView({ showLowStockOnly }) {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
-                <button type="button" className="btn-odoo-secondary" onClick={() => setShowModal(false)}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px', paddingTop: '16px', borderTop: '1px solid var(--color-border)' }}>
+                <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn-odoo-primary" disabled={creating}>
+                <button type="submit" className="btn-primary" disabled={creating}>
                   {creating ? 'Saving...' : 'Save Product'}
                 </button>
               </div>

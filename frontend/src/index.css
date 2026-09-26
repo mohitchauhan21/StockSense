@@ -169,17 +169,18 @@ body {
 }
 
 /* ==========================================================================
-   Button System (Consolidated CTAs with Consistent Hierarchy)
+   StockSense Design System: Unified Button Hierarchy
    ========================================================================== */
 
+/* 1. Primary Action: Solid, Brand Color (Deep Indigo / Cobalt) */
 .btn-primary,
 .btn-odoo-primary {
   background-color: var(--color-primary);
   color: #FFFFFF;
   font-family: var(--font-sans);
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 11px 22px;
+  padding: 9px 18px;
   border-radius: 8px;
   border: 1px solid transparent;
   cursor: pointer;
@@ -187,56 +188,107 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.15s ease;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 1px 3px rgba(30, 58, 138, 0.18), 0 1px 2px rgba(15, 23, 42, 0.08);
 }
 
 .btn-primary:hover,
 .btn-odoo-primary:hover {
   background-color: var(--color-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 4px 14px rgba(30, 58, 138, 0.25);
+  color: #FFFFFF;
 }
 
 .btn-primary:active,
 .btn-odoo-primary:active {
   transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(30, 58, 138, 0.2);
 }
 
+/* 2. Secondary Action: Outlined or Tinted Brand Style (NOT plain flat gray) */
 .btn-secondary,
 .btn-odoo-secondary {
-  background-color: #FFFFFF;
-  color: var(--color-text-heading);
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
   font-family: var(--font-sans);
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 11px 22px;
+  padding: 9px 18px;
   border-radius: 8px;
-  border: 1px solid var(--color-border);
+  border: 1px solid #BFDBFE;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.15s ease;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.05);
 }
 
 .btn-secondary:hover,
 .btn-odoo-secondary:hover {
-  background-color: var(--color-bg-subtle);
-  border-color: var(--color-border-hover);
-  color: var(--color-text-heading);
+  background-color: var(--color-accent-subtle);
+  border-color: var(--color-accent);
+  color: var(--color-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.14);
+}
+
+.btn-secondary:active,
+.btn-odoo-secondary:active {
+  transform: translateY(0);
+}
+
+/* 3. Tertiary Action: Text-Only / Subtle Ghost Action */
+.btn-tertiary {
+  background-color: transparent;
+  color: var(--color-accent);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-tertiary:hover {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
+}
+
+.btn-tertiary:active {
+  background-color: var(--color-accent-subtle);
+}
+
+/* Button Size Modifiers */
+.btn-sm {
+  padding: 6px 12px !important;
+  font-size: 12.5px !important;
+  border-radius: 6px !important;
+}
+
+.btn-lg {
+  padding: 12px 24px !important;
+  font-size: 15px !important;
 }
 
 .btn-pill-action {
   background-color: var(--color-primary);
   color: #FFFFFF;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
-  padding: 8px 18px;
+  padding: 7px 16px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -284,7 +336,7 @@ body {
 }
 
 /* ==========================================================================
-   Apps Launcher Grid (Balanced 4x2 Grid on Desktop & Intentional Active State)
+   Apps Launcher Navigation (Prominent "Current Module" Distinction)
    ========================================================================== */
 
 .app-grid {
@@ -313,6 +365,8 @@ body {
   text-decoration: none;
   text-align: left;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  position: relative;
+  overflow: hidden;
 }
 
 .app-tile-wrapper:hover {
@@ -321,12 +375,22 @@ body {
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
 }
 
-/* Intentional Visible Active State (Filled Primary Background) */
+/* Requirement 5: Clear visual distinction for "current module" */
 .app-tile-wrapper.active {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  box-shadow: 0 6px 18px rgba(30, 58, 138, 0.25);
+  background: linear-gradient(135deg, #1E3A8A 0%, #172554 100%);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent), 0 8px 24px -2px rgba(30, 58, 138, 0.32);
   transform: translateY(-2px);
+}
+
+.app-tile-wrapper.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #60A5FA;
 }
 
 .app-tile {
@@ -350,6 +414,11 @@ body {
 .app-tile-wrapper.active .app-tile {
   background-color: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.app-tile-wrapper.active .app-tile svg {
+  color: #FFFFFF !important;
 }
 
 .app-tile-info {
@@ -389,7 +458,7 @@ body {
 }
 
 .app-tile-wrapper.active .app-tile-sub {
-  color: rgba(255, 255, 255, 0.8);
+  color: #BFDBFE;
 }
 
 .app-tile-active-badge {
@@ -397,21 +466,40 @@ body {
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #FFFFFF;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background-color: rgba(37, 99, 235, 0.4);
+  color: #BFDBFE;
+  border: 1px solid rgba(191, 219, 254, 0.4);
 }
 
 .app-tile-wrapper.active .app-tile-active-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* ==========================================================================
-   Cards & Clean Section Boundaries
+   StockSense Design System: Screen & Card Architecture
    ========================================================================== */
 
+.app-screen-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 32px 24px 56px;
+}
+
+.app-screen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.app-card,
 .stock-card,
 .odoo-card {
   background-color: var(--color-bg-white);
@@ -419,6 +507,16 @@ body {
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.app-card-interactive {
+  cursor: pointer;
+}
+
+.app-card-interactive:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07);
 }
 
 .section-clean-light,
@@ -433,6 +531,215 @@ body {
 /* Remove decorative curved divider */
 .curved-divider-top {
   display: none !important;
+}
+
+/* ==========================================================================
+   Restrained Stat Cards (Requirement 3: No heavy left borders)
+   ========================================================================== */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  justifyContent: space-between;
+  transition: all 0.15s ease;
+}
+
+.stat-card:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.stat-card-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-body);
+}
+
+.stat-card-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #DBEAFE;
+}
+
+.stat-card-icon-wrap.accent {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+  border-color: #BFDBFE;
+}
+
+.stat-card-icon-wrap.warning {
+  background-color: var(--color-status-warning-bg);
+  color: var(--color-status-warning);
+  border-color: #FDE68A;
+}
+
+.stat-card-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--color-text-heading);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.stat-card-sub {
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Table & Onboarding Standards (Requirement 2 & 4)
+   ========================================================================== */
+
+.app-table-container {
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.app-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13.5px;
+}
+
+.app-table thead tr {
+  background-color: var(--color-bg-light);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-heading);
+}
+
+.app-table th {
+  padding: 12px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-body);
+}
+
+.app-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-body);
+}
+
+.app-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.app-table tbody tr:hover td {
+  background-color: #F8FAFC;
+}
+
+/* Onboarding & Optimal State Cards */
+.app-onboarding-card {
+  text-align: center;
+  padding: 44px 28px;
+  background-color: var(--color-bg-light);
+  border-radius: 12px;
+  border: 1px dashed var(--color-border-hover);
+}
+
+.app-onboarding-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.app-status-card-optimal {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  background-color: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 12px;
+}
+
+/* Status Badges & Dots */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status-pill.success {
+  background-color: var(--color-status-success-bg);
+  color: #15803D;
+}
+
+.status-pill.warning {
+  background-color: var(--color-status-warning-bg);
+  color: #B45309;
+}
+
+.status-pill.error {
+  background-color: var(--color-status-error-bg);
+  color: #991B1B;
+}
+
+.status-pill.neutral {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-body);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.live {
+  background-color: #16A34A;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+}
+
+.status-dot.warning {
+  background-color: #D97706;
 }
 
 /* ==========================================================================
@@ -454,6 +761,7 @@ body {
    Inputs & Controls
    ========================================================================== */
 
+.app-input,
 .stock-input,
 .odoo-input {
   background-color: var(--color-bg-white);
@@ -466,8 +774,10 @@ body {
   outline: none;
   width: 100%;
   transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
 }
 
+.app-input:focus,
 .stock-input:focus,
 .odoo-input:focus {
   border-color: var(--color-accent);

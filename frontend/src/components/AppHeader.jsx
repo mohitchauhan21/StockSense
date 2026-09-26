@@ -79,9 +79,8 @@ export default function AppHeader({ activeModule, onReturnHome }) {
         </div>
 
         <button 
-          className="btn-pill-action"
+          className="btn-secondary btn-sm"
           onClick={onReturnHome}
-          style={{ backgroundColor: 'var(--color-bg-light)', color: 'var(--color-text-heading)', border: '1px solid var(--color-border)' }}
         >
           Landing Page
         </button>

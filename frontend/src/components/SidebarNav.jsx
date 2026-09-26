@@ -56,22 +56,22 @@ export default function SidebarNav({ activeModule, onSelectModule, onReturnHome 
               width: '34px',
               height: '34px',
               borderRadius: '8px',
-              background: 'linear-gradient(135deg, var(--color-primary) 0%, #8A3D8F 100%)',
+              background: 'linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontWeight: '800',
               fontSize: '17px',
-              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.25)'
+              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'
             }}>
               S
             </div>
             <div>
               <span style={{ fontSize: '18px', fontWeight: '700', letterSpacing: '-0.02em', color: '#FFFFFF' }}>
-                StockSense<span style={{ color: 'var(--color-accent-orange)' }}>.</span>
+                StockSense
               </span>
-              <span style={{ display: 'block', fontSize: '10px', color: '#A0A0B0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                Odoo ERP Engine
+              <span style={{ display: 'block', fontSize: '10px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                Operations Console
               </span>
             </div>
           </div>
@@ -122,17 +122,18 @@ export default function SidebarNav({ activeModule, onSelectModule, onReturnHome 
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '10px 14px',
-                  borderRadius: '10px',
+                  borderRadius: '8px',
                   backgroundColor: isActive ? 'var(--color-primary)' : 'transparent',
                   border: 'none',
-                  color: isActive ? '#FFFFFF' : '#C5C5D2',
+                  borderLeft: isActive ? '3px solid #60A5FA' : '3px solid transparent',
+                  color: isActive ? '#FFFFFF' : '#CBD5E1',
                   fontSize: '14px',
                   fontWeight: isActive ? '600' : '500',
                   cursor: 'pointer',
                   width: '100%',
                   textAlign: 'left',
                   transition: 'all 0.15s ease',
-                  boxShadow: isActive ? '0 4px 12px rgba(91, 42, 94, 0.4)' : 'none'
+                  boxShadow: isActive ? '0 4px 14px rgba(30, 58, 138, 0.35)' : 'none'
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
@@ -143,20 +144,20 @@ export default function SidebarNav({ activeModule, onSelectModule, onReturnHome 
                 onMouseLeave={(e) => {
                   if (!isActive) {
                     e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = '#C5C5D2';
+                    e.currentTarget.style.color = '#CBD5E1';
                   }
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <IconComponent size={18} color={isActive ? '#FFFFFF' : 'var(--color-accent-orange)'} />
+                  <IconComponent size={18} color={isActive ? '#FFFFFF' : '#94A3B8'} />
                   <span>{mod.label}</span>
                 </div>
                 {mod.badge && (
                   <span style={{
                     fontSize: '10px',
                     fontWeight: '700',
-                    backgroundColor: isActive ? 'rgba(255,255,255,0.25)' : 'rgba(31, 169, 142, 0.2)',
-                    color: isActive ? '#FFFFFF' : 'var(--color-accent-teal)',
+                    backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(37, 99, 235, 0.25)',
+                    color: isActive ? '#FFFFFF' : '#93C5FD',
                     padding: '2px 6px',
                     borderRadius: '4px'
                   }}>
