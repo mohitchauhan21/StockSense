@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+import os
+from fastapi.staticfiles import StaticFiles
 
 import app.models  # Import models registry for SQLAlchemy mappers
 from app.core.exceptions import AppException
@@ -45,17 +47,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routers
-app.include_router(auth_router)
-app.include_router(categories_router)
-app.include_router(warehouses_router)
-app.include_router(products_router)
-app.include_router(receipts_router)
-app.include_router(deliveries_router)
-app.include_router(transfers_router)
-app.include_router(adjustments_router)
-app.include_router(ledger_router)
-app.include_router(dashboard_router)
+# Routers (Mount at root AND under /api/v1 prefix for full compatibility)
+routers = [
+    auth_router,
+    categories_router,
+    warehouses_router,
+    products_router,
+    receipts_router,
+    deliveries_router,
+    transfers_router,
+    adjustments_router,
+    ledger_router,
+    dashboard_router,
+]
+
+for r in routers:
+    app.include_router(r)
+    app.include_router(r, prefix="/api/v1")
 
 @app.get("/health", status_code=status.HTTP_200_OK)
 async def health_check(db: AsyncSession = Depends(get_db)):
@@ -63,10 +71,6 @@ async def health_check(db: AsyncSession = Depends(get_db)):
     return {"status": "ok", "database": "connected"}
 
 # Mount Static Frontend Bundle
-import os
-from fastapi.staticfiles import StaticFiles
-
 frontend_dist = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "dist")
 if os.path.exists(frontend_dist):
     app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="static_frontend")
-

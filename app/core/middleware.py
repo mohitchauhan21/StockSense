@@ -30,7 +30,8 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         content={
             "success": False,
             "message": "Validation failed",
-            "errors": formatted_errors
+            "errors": formatted_errors,
+            "detail": formatted_errors
         }
     )
 

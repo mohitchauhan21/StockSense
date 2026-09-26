@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Optional
 from fastapi import APIRouter, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession

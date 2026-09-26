@@ -7,9 +7,11 @@ from app.models.user import User
 from app.models.documents import DocumentStatus
 from app.modules.dashboard.dashboard_schemas import DashboardSummaryOut, UnifiedDocumentListOut
 from app.modules.dashboard.dashboard_service import DashboardService
+from app.modules.products.products_service import list_products
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
+@router.get("/kpis")
 @router.get("/summary", response_model=DashboardSummaryOut)
 async def get_dashboard_summary(
     current_user: User = Depends(get_current_user),
@@ -17,6 +19,23 @@ async def get_dashboard_summary(
 ):
     service = DashboardService(db)
     return await service.get_summary()
+
+@router.get("/low-stock")
+async def get_low_stock_items(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    products, _ = await list_products(db, low_stock_only=True)
+    return [
+        {
+            "id": p.id,
+            "sku": p.sku,
+            "name": p.name,
+            "current_stock": p.current_stock,
+            "min_reorder_point": p.min_reorder_point,
+        }
+        for p in products
+    ]
 
 @router.get("/documents", response_model=UnifiedDocumentListOut)
 async def get_dashboard_documents(
