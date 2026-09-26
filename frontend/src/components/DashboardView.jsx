@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api';
 import { Package, Warehouse, AlertTriangle, Layers, Plus, ArrowRight, RefreshCw, CheckCircle2, PackagePlus } from 'lucide-react';
+import AIInventoryCopilot from './AIInventoryCopilot';
 
 export default function DashboardView({ onSelectModule, showLowStockOnly }) {
   const [kpis, setKpis] = useState(null);
@@ -40,6 +41,11 @@ export default function DashboardView({ onSelectModule, showLowStockOnly }) {
 
   return (
     <div className="app-screen-container">
+      <AIInventoryCopilot
+  kpis={kpis}
+  lowStockAlerts={lowStockAlerts}
+  onSelectModule={onSelectModule}
+/>
       
       {/* Screen Header Bar */}
       <div className="app-screen-header">
