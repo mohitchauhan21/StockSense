@@ -1,0 +1,394 @@
+:root {
+  /* Odoo Color Palette Tokens */
+  --color-primary: #5B2A5E;
+  --color-primary-hover: #4A2150;
+  --color-accent-orange: #F4A83B;
+  --color-accent-teal: #1FA98E;
+  --color-accent-coral: #F16B5C;
+  --color-bg-light: #F4F5F7;
+  --color-bg-white: #FFFFFF;
+  --color-text-heading: #1B1B2F;
+  --color-text-body: #5A5A66;
+  --color-border: #E5E5EA;
+  --color-btn-secondary-bg: #EDEDF0;
+
+  /* Fonts */
+  --font-handwritten: 'Caveat', cursive, sans-serif;
+  --font-sans: 'Inter', 'Poppins', -apple-system, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-bg-white);
+  color: var(--color-text-body);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Scale */
+.handwritten-hero {
+  font-family: var(--font-handwritten);
+  font-size: clamp(42px, 5vw, 68px);
+  font-weight: 700;
+  color: var(--color-text-heading);
+  line-height: 1.15;
+}
+
+.handwritten-subhead {
+  font-family: var(--font-handwritten);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 700;
+  color: var(--color-text-heading);
+  line-height: 1.25;
+}
+
+.handwritten-annotation {
+  font-family: var(--font-handwritten);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary);
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+.heading-xl {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  letter-spacing: -0.01em;
+}
+
+.heading-lg {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text-heading);
+}
+
+.heading-md {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-heading);
+}
+
+.body-text {
+  font-size: 15px;
+  color: var(--color-text-body);
+  line-height: 1.6;
+}
+
+/* Hand-Drawn Marker Accents */
+.marker-orange {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+.marker-orange::before {
+  content: '';
+  position: absolute;
+  inset: 4px -4px 2px -4px;
+  background-color: var(--color-accent-orange);
+  border-radius: 6px;
+  transform: rotate(-1deg);
+  z-index: -1;
+}
+
+.underline-teal {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-teal::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 4px;
+  background-color: var(--color-accent-teal);
+  border-radius: 2px;
+}
+
+.strikethrough-coral {
+  position: relative;
+  display: inline-block;
+}
+
+.strikethrough-coral::after {
+  content: '';
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: 50%;
+  height: 4px;
+  background-color: var(--color-accent-coral);
+  transform: translateY(-50%) rotate(-2deg);
+  border-radius: 2px;
+}
+
+/* Buttons (Odoo Pill & Rounded Styles) */
+.btn-odoo-primary {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(91, 42, 94, 0.2);
+}
+
+.btn-odoo-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(91, 42, 94, 0.28);
+}
+
+.btn-odoo-primary:active {
+  transform: translateY(0);
+}
+
+.btn-odoo-secondary {
+  background-color: var(--color-btn-secondary-bg);
+  color: var(--color-text-heading);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-odoo-secondary:hover {
+  background-color: #E2E2E6;
+  color: var(--color-primary);
+}
+
+.btn-pill-action {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.15s;
+}
+
+.btn-pill-action:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Odoo Floating Announcement Pill */
+.announcement-pill {
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  padding: 8px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.announcement-pill .pill-badge {
+  font-weight: 600;
+  color: var(--color-text-heading);
+}
+
+.announcement-pill .pill-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.announcement-pill .pill-link:hover {
+  text-decoration: underline;
+}
+
+/* Odoo App Tile Grid (5.4) */
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 24px;
+  margin-top: 32px;
+}
+
+@media (max-width: 900px) {
+  .app-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .app-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.app-tile-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 16px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.app-tile {
+  width: 72px;
+  height: 72px;
+  background-color: var(--color-bg-white);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.app-tile-wrapper:hover .app-tile {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(91, 42, 94, 0.15);
+  border-color: var(--color-primary);
+}
+
+.app-tile-wrapper.active .app-tile {
+  box-shadow: 0 0 0 3px var(--color-primary);
+  background-color: #FBF7FC;
+}
+
+.app-tile-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  text-align: center;
+}
+
+/* Cards & Section Dividers */
+.odoo-card {
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.odoo-section-light {
+  background-color: var(--color-bg-light);
+  position: relative;
+  padding: 64px 24px 80px;
+}
+
+/* Curved Divider SVG */
+.curved-divider-top {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  z-index: 2;
+}
+
+.curved-divider-top svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 40px;
+}
+
+/* Floating Action Button (5.9) */
+.fab-chat {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(91, 42, 94, 0.35);
+  transition: transform 0.15s ease, background-color 0.15s;
+  z-index: 999;
+}
+
+.fab-chat:hover {
+  transform: scale(1.08);
+  background-color: var(--color-primary-hover);
+}
+
+/* Custom Input Style */
+.odoo-input {
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  color: var(--color-text-heading);
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.odoo-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(91, 42, 94, 0.12);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-light);
+}
+::-webkit-scrollbar-thumb {
+  background: #C7C7D0;
+  border-radius: 9999px;
+}

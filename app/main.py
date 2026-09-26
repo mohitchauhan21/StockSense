@@ -61,3 +61,12 @@ app.include_router(dashboard_router)
 async def health_check(db: AsyncSession = Depends(get_db)):
     await db.execute(select(1))
     return {"status": "ok", "database": "connected"}
+
+# Mount Static Frontend Bundle
+import os
+from fastapi.staticfiles import StaticFiles
+
+frontend_dist = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "dist")
+if os.path.exists(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="static_frontend")
+
