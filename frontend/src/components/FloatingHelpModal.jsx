@@ -74,16 +74,16 @@ export default function FloatingHelpModal() {
                 width: '32px',
                 height: '32px',
                 borderRadius: '50%',
-                backgroundColor: 'rgba(255,255,255,0.2)',
+                backgroundColor: 'rgba(255,255,255,0.15)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <Sparkles size={18} color="var(--color-accent-orange)" />
+                <Sparkles size={16} color="#FFFFFF" />
               </div>
               <div>
                 <h4 style={{ fontSize: '15px', fontWeight: '700' }}>StockSense Support</h4>
-                <p style={{ fontSize: '11px', opacity: 0.85 }}>Online • Odoo-Style Assistant</p>
+                <p style={{ fontSize: '11px', opacity: 0.85 }}>Online • Operations Assistant</p>
               </div>
             </div>
             <button 

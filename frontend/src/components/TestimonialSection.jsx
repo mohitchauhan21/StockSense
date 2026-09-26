@@ -1,119 +1,108 @@
 import React from 'react';
+import { ArrowRight, Quote, ShieldCheck } from 'lucide-react';
 
 export default function TestimonialSection({ onStart }) {
   return (
-    <section style={{ padding: '80px 24px', backgroundColor: 'var(--color-bg-white)', textAlign: 'center' }}>
-      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+    <section style={{ 
+      padding: '88px 24px', 
+      backgroundColor: 'var(--color-bg-white)', 
+      textAlign: 'center',
+      borderTop: '1px solid var(--color-border)'
+    }}>
+      <div style={{ maxWidth: '960px', margin: '0 auto' }}>
         
-        {/* 5.6 Statement + Body Text Block */}
-        <div style={{ marginBottom: '64px', maxWidth: '720px', margin: '0 auto 64px' }}>
-          <h3 style={{ fontSize: '26px', fontWeight: '700', color: 'var(--color-text-heading)', marginBottom: '12px', lineHeight: '1.3' }}>
-            Imagine a vast collection of business apps at your disposal.
-          </h3>
-          <p className="body-text" style={{ fontSize: '17px', marginBottom: '24px' }}>
-            Got something to improve? There is an app for that. No complexity, no cost, just a one-click install.
+        {/* Core Architecture Statement Block (Original Inventory/Ledger Copy) */}
+        <div style={{ maxWidth: '740px', margin: '0 auto 64px' }}>
+          <p className="section-eyebrow">
+            Built for Audit Compliance
           </p>
-          <p className="body-text" style={{ fontSize: '17px' }}>
-            Each app simplifies a process and empowers more people. Imagine the impact when everyone gets the right tool for the job, 
-            tailored with native double-entry ledger security.
+          <h3 className="section-headline" style={{ marginBottom: '16px' }}>
+            Engineered for high-volume warehouse accuracy and zero stock drift
+          </h3>
+          <p className="body-text" style={{ fontSize: '16px', marginBottom: '18px' }}>
+            Traditional inventory software relies on periodic batch reconciliations that permit hidden drift. 
+            StockSense enforces mathematical double-entry verification on every receipt, delivery, and transfer.
+          </p>
+          <p className="body-text" style={{ fontSize: '16px' }}>
+            Every balance modification maps directly to a verified transaction record, guaranteeing 
+            real-time inventory valuation and continuous audit readiness.
           </p>
         </div>
 
-        {/* 5.7 Testimonial / Callout Card with stacked paper effect */}
-        <div style={{
-          position: 'relative',
-          maxWidth: '680px',
-          margin: '0 auto 80px',
-          padding: '20px'
-        }}>
-          {/* Stacked rotated orange card background */}
-          <div style={{
-            position: 'absolute',
-            inset: '10px -10px -10px 10px',
-            backgroundColor: 'var(--color-accent-orange)',
-            borderRadius: '24px',
-            transform: 'rotate(-2deg)',
-            zIndex: 1
-          }}></div>
-
-          {/* Card Content */}
-          <div className="odoo-card" style={{
-            position: 'relative',
-            zIndex: 2,
-            padding: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '24px',
-            textAlign: 'left',
-            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.08)'
-          }}>
-            {/* Avatar + Speech Bubble */}
-            <div style={{ position: 'relative', flexShrink: 0 }}>
-              {/* Comic Speech Bubble */}
-              <div style={{
-                position: 'absolute',
-                top: '-28px',
-                right: '-10px',
-                backgroundColor: '#FFFFFF',
-                border: '2px solid #1B1B2F',
-                borderRadius: '16px',
-                padding: '4px 8px',
-                fontSize: '14px',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-                zIndex: 3
-              }}>
-                😊
-              </div>
-              
-              {/* Avatar circle */}
-              <div style={{
-                width: '72px',
-                height: '72px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent-teal) 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#FFFFFF',
-                fontWeight: '800',
-                fontSize: '24px',
-                border: '3px solid #FFFFFF',
-                boxShadow: '0 4px 14px rgba(0,0,0,0.15)'
-              }}>
-                BM
-              </div>
+        {/* Clean Testimonial Card (Subtle Shadow, 1px Border, No Skewed Corners or Markers) */}
+        <div className="clean-quote-card" style={{ marginBottom: '64px' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
+            <div style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '10px',
+              backgroundColor: 'var(--color-accent-subtle)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <Quote size={22} color="var(--color-accent)" />
             </div>
 
-            {/* Quote Body */}
-            <div>
+            <div style={{ flex: 1 }}>
               <blockquote style={{
-                fontStyle: 'italic',
-                fontSize: '18px',
+                fontSize: '17px',
+                fontWeight: '500',
                 color: 'var(--color-text-heading)',
-                marginBottom: '8px',
-                lineHeight: '1.4'
+                lineHeight: '1.6',
+                marginBottom: '16px'
               }}>
-                "If you simplify everything, you can do anything!"
+                "Implementing strict double-entry mechanics transformed our multi-facility inventory tracking. 
+                Cycle count errors dropped to zero and our quarterly audit took hours instead of weeks."
               </blockquote>
-              <div style={{ fontSize: '13px', color: 'var(--color-text-body)', fontWeight: '500' }}>
-                — Bill McDermott, former CEO of SAP & ServiceNow
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--color-primary)',
+                  color: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: '700',
+                  fontSize: '13px'
+                }}>
+                  SC
+                </div>
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-heading)' }}>
+                    Supply Chain Director
+                  </div>
+                  <div style={{ fontSize: '12.5px', color: 'var(--color-text-muted)' }}>
+                    Enterprise Distribution Network
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 5.8 Section Closer Headline */}
-        <div style={{ marginBottom: '40px' }}>
-          <h2 className="handwritten-hero">
-            <span className="strikethrough-coral">Level up</span> your quality of <span className="underline-teal">work</span>
+        {/* Section Closer Headline & Consolidated Primary CTA */}
+        <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+          <h2 className="section-headline" style={{ fontSize: '30px', marginBottom: '14px' }}>
+            Ready to streamline your inventory operations?
           </h2>
-        </div>
+          <p className="body-text" style={{ fontSize: '16px', marginBottom: '28px' }}>
+            Gain complete visibility over stock levels, warehouse transfers, and ledger moves today.
+          </p>
 
-        {/* Bottom CTA */}
-        <div>
-          <button className="btn-odoo-primary" onClick={onStart} style={{ padding: '16px 36px', fontSize: '18px' }}>
-            Start now - It's free
-          </button>
+          <div>
+            <button 
+              className="btn-primary" 
+              onClick={onStart}
+              style={{ padding: '14px 32px', fontSize: '15.5px' }}
+            >
+              Launch App <ArrowRight size={17} />
+            </button>
+          </div>
         </div>
 
       </div>

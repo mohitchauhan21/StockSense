@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import HeaderNav from './components/HeaderNav';
-import OdooHero from './components/OdooHero';
+import HeroSection from './components/HeroSection';
 import SidebarNav from './components/SidebarNav';
 import AppHeader from './components/AppHeader';
+import AppGridLauncher from './components/AppGridLauncher';
 import DashboardView from './components/DashboardView';
 import ProductsView from './components/ProductsView';
 import ReceiptsView from './components/ReceiptsView';
@@ -12,14 +13,19 @@ import AdjustmentsView from './components/AdjustmentsView';
 import LedgerView from './components/LedgerView';
 import WarehousesView from './components/WarehousesView';
 import CategoriesView from './components/CategoriesView';
+import PricingView from './components/PricingView';
+import DocsEntryView from './components/DocsEntryView';
+import AboutView from './components/AboutView';
 import TestimonialSection from './components/TestimonialSection';
 import FloatingHelpModal from './components/FloatingHelpModal';
 import SignInModal from './components/SignInModal';
 import AdvisorModal from './components/AdvisorModal';
+import { Layers, ArrowRight } from 'lucide-react';
 
 export default function App() {
   const [viewMode, setViewMode] = useState('landing'); // 'landing' | 'app'
   const [activeModule, setActiveModule] = useState('dashboard');
+  const [landingSection, setLandingSection] = useState('default'); // 'default' | 'pricing' | 'docs' | 'about'
   const [showLowStockOnly, setShowLowStockOnly] = useState(false);
 
   // Modals state
@@ -34,6 +40,7 @@ export default function App() {
 
   const handleReturnHome = () => {
     setViewMode('landing');
+    setLandingSection('default');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -93,6 +100,18 @@ export default function App() {
             {activeModule === 'categories' && (
               <CategoriesView />
             )}
+
+            {activeModule === 'pricing' && (
+              <PricingView onLaunchApp={() => handleLaunchApp('dashboard')} />
+            )}
+
+            {activeModule === 'docs' && (
+              <DocsEntryView onLaunchApp={() => handleLaunchApp('dashboard')} />
+            )}
+
+            {activeModule === 'about' && (
+              <AboutView onLaunchApp={() => handleLaunchApp('dashboard')} />
+            )}
           </main>
 
           {/* Modals */}
@@ -114,89 +133,256 @@ export default function App() {
     );
   }
 
-  // Render 2: Landing Page Mode (Marketing & Overview)
+  // Render 2: Landing Page Mode (Clean SaaS Visual Identity)
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#FFFFFF' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-bg-white)' }}>
       
-      {/* Top Sticky Navigation */}
+      {/* Top Navigation Bar */}
       <HeaderNav 
-        activeModule={activeModule} 
-        onSelectModule={(mod) => handleLaunchApp(mod === 'hero' ? 'dashboard' : mod)} 
+        activeModule={landingSection !== 'default' ? landingSection : activeModule} 
+        onSelectModule={(target) => {
+          if (target === 'pricing' || target === 'docs' || target === 'about') {
+            setLandingSection(target);
+            setTimeout(() => {
+              const el = document.getElementById('marketing-subview');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 50);
+          } else if (target === 'hero') {
+            setLandingSection('default');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            handleLaunchApp(target === 'app-grid' ? 'dashboard' : target);
+          }
+        }} 
         onOpenSignIn={() => setIsSignInOpen(true)}
       />
 
       {/* Hero Display Section */}
-      <OdooHero 
+      <HeroSection 
         onStart={() => handleLaunchApp('dashboard')} 
-        onOpenAdvisor={() => setIsAdvisorOpen(true)}
+        onDocs={() => {
+          setLandingSection('docs');
+          setTimeout(() => {
+            const el = document.getElementById('marketing-subview');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
+        }}
       />
 
-      {/* Features Showcase Cards Section */}
-      <section style={{ padding: '64px 24px', backgroundColor: 'var(--color-bg-light)', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: '700', color: 'var(--color-primary)', marginBottom: '8px' }}>
-            StockSense Core Capabilities
-          </h2>
-          <p style={{ fontSize: '28px', fontWeight: '800', color: 'var(--color-text-heading)', marginBottom: '40px' }}>
-            Double-Entry Stock Rules • Real-Time Auditing
-          </p>
+      {/* Balanced 4x2 App Launcher Grid */}
+      <AppGridLauncher 
+        activeModule={activeModule}
+        onSelectModule={(modId) => handleLaunchApp(modId)}
+        showLowStockOnly={showLowStockOnly}
+        onToggleLowStock={setShowLowStockOnly}
+      />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-            <div className="odoo-card" style={{ borderLeft: '4px solid var(--color-primary)', textAlign: 'left' }}>
-              <h3 className="heading-md" style={{ marginBottom: '8px' }}>Single Atomic Function</h3>
-              <p className="body-text" style={{ fontSize: '14px' }}>
-                Every stock mutation is strictly routed through update_stock() in Python, enforcing immutable double-entry constraints.
-              </p>
-              <button className="btn-odoo-secondary" onClick={() => handleLaunchApp('ledger')} style={{ marginTop: '16px', fontSize: '13px', padding: '6px 14px' }}>
-                Explore Ledger →
-              </button>
-            </div>
+      {/* Marketing Subview (Pricing, Docs, About, or Testimonial) */}
+      <div id="marketing-subview">
+        {landingSection === 'pricing' && (
+          <PricingView onLaunchApp={() => handleLaunchApp('dashboard')} />
+        )}
 
-            <div className="odoo-card" style={{ borderLeft: '4px solid var(--color-accent-teal)', textAlign: 'left' }}>
-              <h3 className="heading-md" style={{ marginBottom: '8px' }}>Reorder Point Alerts</h3>
-              <p className="body-text" style={{ fontSize: '14px' }}>
-                Automated minimum stock alerts warn managers before inventory dips below critical thresholds.
-              </p>
-              <button className="btn-odoo-secondary" onClick={() => handleLaunchApp('products')} style={{ marginTop: '16px', fontSize: '13px', padding: '6px 14px' }}>
-                View Catalog →
-              </button>
-            </div>
+        {landingSection === 'docs' && (
+          <DocsEntryView onLaunchApp={() => handleLaunchApp('dashboard')} />
+        )}
 
-            <div className="odoo-card" style={{ borderLeft: '4px solid var(--color-accent-orange)', textAlign: 'left' }}>
-              <h3 className="heading-md" style={{ marginBottom: '8px' }}>Multi-Warehouse Operations</h3>
-              <p className="body-text" style={{ fontSize: '14px' }}>
-                Manage receipts, customer deliveries, internal transfers, and physical audit adjustments in one place.
-              </p>
-              <button className="btn-odoo-secondary" onClick={() => handleLaunchApp('warehouses')} style={{ marginTop: '16px', fontSize: '13px', padding: '6px 14px' }}>
-                View Warehouses →
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+        {landingSection === 'about' && (
+          <AboutView onLaunchApp={() => handleLaunchApp('dashboard')} />
+        )}
+      </div>
 
-      {/* Testimonials & Closing Handwritten Statement */}
+      {/* Testimonial & System Statement */}
       <TestimonialSection 
         onStart={() => handleLaunchApp('dashboard')} 
       />
 
-      {/* Footer */}
+      {/* Clean Enterprise SaaS Footer */}
       <footer style={{
-        backgroundColor: '#1B1B2F',
-        color: '#A0A0B0',
-        padding: '32px 24px',
-        textAlign: 'center',
-        fontSize: '14px',
-        borderTop: '1px solid #2B2B3F'
+        backgroundColor: '#0F172A',
+        color: '#94A3B8',
+        padding: '56px 24px 36px',
+        borderTop: '1px solid #1E293B',
+        fontSize: '14px'
       }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontWeight: '800', color: '#FFFFFF', fontSize: '16px' }}>StockSense</span>
-            <span>— Odoo Hiring Hackathon 2026</span>
+        <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          
+          <div style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '32px',
+            paddingBottom: '40px',
+            borderBottom: '1px solid #1E293B'
+          }}>
+            {/* Brand Block */}
+            <div style={{ maxWidth: '340px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--color-accent)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Layers size={18} color="#FFFFFF" strokeWidth={2.2} />
+                </div>
+                <span style={{ fontWeight: '800', color: '#FFFFFF', fontSize: '18px', letterSpacing: '-0.02em' }}>
+                  StockSense
+                </span>
+              </div>
+              <p style={{ color: '#94A3B8', fontSize: '13.5px', lineHeight: '1.6' }}>
+                Enterprise inventory control and immutable double-entry ledger verification. 
+                Zero stock drift across multi-facility warehouse networks.
+              </p>
+            </div>
+
+            {/* Nav Links Column */}
+            <div style={{ display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
+              <div>
+                <div style={{ color: '#FFFFFF', fontWeight: '700', fontSize: '13.5px', marginBottom: '14px' }}>
+                  Platform
+                </div>
+                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13.5px' }}>
+                  <li>
+                    <a 
+                      href="#dashboard" 
+                      onClick={(e) => { e.preventDefault(); handleLaunchApp('dashboard'); }}
+                      style={{ color: '#94A3B8', textDecoration: 'none' }}
+                      onMouseEnter={(e) => e.target.style.color = '#FFFFFF'}
+                      onMouseLeave={(e) => e.target.style.color = '#94A3B8'}
+                    >
+                      Operations Console
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="#ledger" 
+                      onClick={(e) => { e.preventDefault(); handleLaunchApp('ledger'); }}
+                      style={{ color: '#94A3B8', textDecoration: 'none' }}
+                      onMouseEnter={(e) => e.target.style.color = '#FFFFFF'}
+                      onMouseLeave={(e) => e.target.style.color = '#94A3B8'}
+                    >
+                      Move History Ledger
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="#pricing" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setLandingSection('pricing');
+                        const el = document.getElementById('marketing-subview');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      style={{ color: '#94A3B8', textDecoration: 'none' }}
+                      onMouseEnter={(e) => e.target.style.color = '#FFFFFF'}
+                      onMouseLeave={(e) => e.target.style.color = '#94A3B8'}
+                    >
+                      Pricing Plans
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <div style={{ color: '#FFFFFF', fontWeight: '700', fontSize: '13.5px', marginBottom: '14px' }}>
+                  Resources
+                </div>
+                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13.5px' }}>
+                  <li>
+                    <a 
+                      href="#docs" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setLandingSection('docs');
+                        const el = document.getElementById('marketing-subview');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      style={{ color: '#94A3B8', textDecoration: 'none' }}
+                      onMouseEnter={(e) => e.target.style.color = '#FFFFFF'}
+                      onMouseLeave={(e) => e.target.style.color = '#94A3B8'}
+                    >
+                      Documentation
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="/docs" 
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ color: '#94A3B8', textDecoration: 'none' }}
+                      onMouseEnter={(e) => e.target.style.color = '#FFFFFF'}
+                      onMouseLeave={(e) => e.target.style.color = '#94A3B8'}
+                    >
+                      API Reference (OpenAPI)
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="#about" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setLandingSection('about');
+                        const el = document.getElementById('marketing-subview');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      style={{ color: '#94A3B8', textDecoration: 'none' }}
+                      onMouseEnter={(e) => e.target.style.color = '#FFFFFF'}
+                      onMouseLeave={(e) => e.target.style.color = '#94A3B8'}
+                    >
+                      About & Changelog
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Consolidated Primary CTA in Footer */}
+            <div>
+              <div style={{ color: '#FFFFFF', fontWeight: '700', fontSize: '13.5px', marginBottom: '14px' }}>
+                Get Started
+              </div>
+              <p style={{ color: '#94A3B8', fontSize: '13px', marginBottom: '14px', maxWidth: '240px' }}>
+                Open the operational console to manage inventory in real time.
+              </p>
+              <button
+                className="btn-primary"
+                onClick={() => handleLaunchApp('dashboard')}
+                style={{ padding: '10px 22px', fontSize: '14px' }}
+              >
+                Launch App <ArrowRight size={15} />
+              </button>
+            </div>
+
           </div>
-          <div>
-            Modeled after Odoo marketing design system • Powered by FastAPI & PostgreSQL
+
+          {/* Bottom Copyright & Legal */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingTop: '24px',
+            fontSize: '12.5px',
+            color: '#64748B',
+            flexWrap: 'wrap',
+            gap: '12px'
+          }}>
+            <div>
+              © 2026 StockSense Systems Inc. All rights reserved.
+            </div>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <span>Privacy Policy</span>
+              <span>•</span>
+              <span>Terms of Service</span>
+              <span>•</span>
+              <span>Security</span>
+            </div>
           </div>
+
         </div>
       </footer>
 
@@ -212,7 +398,7 @@ export default function App() {
         onClose={() => setIsAdvisorOpen(false)}
       />
 
-      {/* Floating Action Button Chat */}
+      {/* Floating Action Button Support */}
       <FloatingHelpModal />
 
     </div>

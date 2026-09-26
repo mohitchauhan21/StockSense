@@ -1,9 +1,10 @@
 import React from 'react';
+import { Layers } from 'lucide-react';
 
 export default function HeaderNav({ activeModule, onSelectModule, onOpenSignIn }) {
   return (
     <header style={{
-      height: '72px',
+      height: '68px',
       backgroundColor: 'var(--color-bg-white)',
       borderBottom: '1px solid var(--color-border)',
       position: 'sticky',
@@ -22,67 +23,74 @@ export default function HeaderNav({ activeModule, onSelectModule, onOpenSignIn }
           style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}
         >
           <div style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, var(--color-primary) 0%, #8A3D8F 100%)',
+            width: '34px',
+            height: '34px',
+            borderRadius: '8px',
+            backgroundColor: 'var(--color-primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: '#FFFFFF',
-            fontWeight: '800',
-            fontSize: '18px',
-            boxShadow: '0 4px 10px rgba(91, 42, 94, 0.25)'
+            boxShadow: '0 2px 6px rgba(15, 23, 42, 0.15)'
           }}>
-            S
+            <Layers size={19} color="#FFFFFF" strokeWidth={2.2} />
           </div>
           <span style={{
-            fontSize: '22px',
+            fontSize: '20px',
             fontWeight: '700',
-            color: 'var(--color-primary)',
+            color: 'var(--color-text-heading)',
             letterSpacing: '-0.02em',
             fontFamily: 'var(--font-sans)'
           }}>
-            StockSense<span style={{ color: 'var(--color-accent-orange)' }}>.</span>
+            StockSense
           </span>
         </a>
 
         {/* Center Nav Links */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           {[
-            { label: 'Apps', action: () => onSelectModule('dashboard') },
-            { label: 'Modules', action: () => onSelectModule('products') },
-            { label: 'Ledger', action: () => onSelectModule('ledger') },
-            { label: 'Warehouses', action: () => onSelectModule('warehouses') },
-            { label: 'Docs', action: () => window.open('/docs', '_blank') },
-          ].map((item) => (
-            <a
-              key={item.label}
-              href={`#${item.label.toLowerCase()}`}
-              onClick={(e) => {
-                e.preventDefault();
-                item.action();
-              }}
-              style={{
-                color: 'var(--color-text-body)',
-                fontWeight: '500',
-                fontSize: '14px',
-                textDecoration: 'none',
-                transition: 'color 0.15s ease',
-              }}
-              onMouseEnter={(e) => e.target.style.color = 'var(--color-text-heading)'}
-              onMouseLeave={(e) => e.target.style.color = 'var(--color-text-body)'}
-            >
-              {item.label}
-            </a>
-          ))}
+            { label: 'Modules', id: 'app-grid' },
+            { label: 'Ledger', id: 'ledger' },
+            { label: 'Pricing', id: 'pricing' },
+            { label: 'Docs', id: 'docs' },
+          ].map((item) => {
+            const isCurrent = activeModule === item.id;
+            return (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (item.id === 'app-grid') {
+                    const el = document.getElementById('app-grid-section');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    onSelectModule(item.id);
+                  }
+                }}
+                style={{
+                  color: isCurrent ? 'var(--color-accent)' : 'var(--color-text-body)',
+                  fontWeight: isCurrent ? '600' : '500',
+                  fontSize: '14px',
+                  textDecoration: 'none',
+                  transition: 'color 0.15s ease',
+                  padding: '4px 0',
+                  borderBottom: isCurrent ? '2px solid var(--color-accent)' : '2px solid transparent'
+                }}
+                onMouseEnter={(e) => { if (!isCurrent) e.target.style.color = 'var(--color-text-heading)'; }}
+                onMouseLeave={(e) => { if (!isCurrent) e.target.style.color = 'var(--color-text-body)'; }}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
       </div>
 
-      {/* Right Actions */}
+      {/* Right Actions: Consolidated Primary CTA */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <button
-          onClick={onOpenSignIn}
+          onClick={onOpenSignIn || (() => onSelectModule('dashboard'))}
           style={{
             background: 'none',
             border: 'none',
@@ -92,27 +100,19 @@ export default function HeaderNav({ activeModule, onSelectModule, onOpenSignIn }
             cursor: 'pointer',
             padding: '6px 12px'
           }}
-          onMouseEnter={(e) => e.target.style.color = 'var(--color-primary)'}
+          onMouseEnter={(e) => e.target.style.color = 'var(--color-text-heading)'}
           onMouseLeave={(e) => e.target.style.color = 'var(--color-text-body)'}
         >
           Sign in
         </button>
 
-        {/* CTA Button with Live Sync Indicator Dot */}
+        {/* Consolidated Primary CTA */}
         <button
-          className="btn-pill-action"
+          className="btn-primary"
           onClick={() => onSelectModule('dashboard')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          style={{ padding: '8px 18px', fontSize: '14px' }}
         >
-          <span style={{
-            width: '8px',
-            height: '8px',
-            borderRadius: '50%',
-            backgroundColor: '#4ADE80',
-            boxShadow: '0 0 8px #4ADE80',
-            display: 'inline-block'
-          }}></span>
-          Launch Inventory App
+          Launch App
         </button>
       </div>
     </header>

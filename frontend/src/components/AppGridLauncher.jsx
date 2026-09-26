@@ -8,7 +8,7 @@ import {
   Sliders, 
   BookOpen, 
   Warehouse,
-  Sparkles,
+  AlertTriangle,
   ArrowRight
 } from 'lucide-react';
 
@@ -17,101 +17,76 @@ export const MODULES = [
     id: 'dashboard',
     label: 'Dashboard',
     icon: BarChart3,
-    color1: '#5B2A5E',
-    color2: '#F4A83B',
-    desc: 'KPIs, stock metrics & low-stock alerts'
+    sub: 'KPIs & live stock valuation',
+    desc: 'Aggregated warehouse metrics and system overview'
   },
   {
     id: 'products',
     label: 'Products',
     icon: Package,
-    color1: '#1FA98E',
-    color2: '#F4A83B',
-    desc: 'Catalog, SKUs & reorder limits'
+    sub: 'SKUs & reorder limits',
+    desc: 'Master product catalog and unit definitions'
   },
   {
     id: 'receipts',
-    label: 'Receipts (GRN)',
+    label: 'Receipts',
     icon: Download,
-    color1: '#5B2A5E',
-    color2: '#1FA98E',
-    desc: 'Incoming vendor purchase stock'
+    sub: 'Inbound PO intake',
+    desc: 'Supplier shipments and intake validation'
   },
   {
     id: 'deliveries',
     label: 'Deliveries',
     icon: Truck,
-    color1: '#F16B5C',
-    color2: '#F4A83B',
-    desc: 'Outgoing customer sales stock'
+    sub: 'Outbound dispatch',
+    desc: 'Customer order picking, packing & shipment'
   },
   {
     id: 'transfers',
     label: 'Transfers',
     icon: ArrowLeftRight,
-    color1: '#2563EB',
-    color2: '#1FA98E',
-    desc: 'Internal warehouse-to-warehouse moves'
+    sub: 'Inter-facility balance',
+    desc: 'Internal movements between warehouse locations'
   },
   {
     id: 'adjustments',
     label: 'Adjustments',
     icon: Sliders,
-    color1: '#8B5CF6',
-    color2: '#F4A83B',
-    desc: 'Physical count corrections & audits'
+    sub: 'Physical count audits',
+    desc: 'Inventory reconciliation and variance write-offs'
   },
   {
     id: 'ledger',
-    label: 'Move History',
+    label: 'Stock Ledger',
     icon: BookOpen,
-    color1: '#1FA98E',
-    color2: '#F16B5C',
-    desc: 'Immutable append-only transaction log'
+    sub: 'Immutable audit trail',
+    desc: 'Append-only double-entry transaction log'
   },
   {
     id: 'warehouses',
     label: 'Warehouses',
     icon: Warehouse,
-    color1: '#F4A83B',
-    color2: '#5B2A5E',
-    desc: 'Physical storage locations & codes'
+    sub: 'Storage & zones',
+    desc: 'Facilities, storage bins and locations'
   },
 ];
 
 export default function AppGridLauncher({ activeModule, onSelectModule, showLowStockOnly, onToggleLowStock }) {
   return (
-    <section className="odoo-section-light" id="app-grid-section">
-      {/* 4. Curved SVG Section Divider */}
-      <div className="curved-divider-top">
-        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-          <path 
-            d="M0,0 C300,90 900,90 1200,0 L1200,120 L0,120 Z" 
-            fill="var(--color-bg-light)"
-          ></path>
-        </svg>
-      </div>
-
-      <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 5 }}>
+    <section className="section-clean-light" id="app-grid-section">
+      <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
         
-        {/* Section Title */}
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <h2 style={{
-            fontSize: '14px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            fontWeight: '700',
-            color: 'var(--color-primary)',
-            marginBottom: '6px'
-          }}>
-            StockSense Apps Launcher
-          </h2>
-          <p style={{ fontSize: '22px', fontWeight: '700', color: 'var(--color-text-heading)' }}>
-            Select a module to manage inventory operations
+        {/* Section Header */}
+        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+          <p className="section-eyebrow">
+            Operations Console
           </p>
+          <h2 className="section-headline">
+            Select a module to manage inventory operations
+          </h2>
         </div>
 
-        {/* 5.4 App Grid (6 columns desktop) */}
+        {/* Balanced 4x2 Grid of 8 Operations Modules */}
         <div className="app-grid">
           {MODULES.map((mod) => {
             const IconComp = mod.icon;
@@ -124,47 +99,49 @@ export default function AppGridLauncher({ activeModule, onSelectModule, showLowS
                 title={mod.desc}
               >
                 <div className="app-tile">
-                  {/* Duo-tone Flat Geometric Icon */}
-                  <div style={{ position: 'relative', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{
-                      position: 'absolute',
-                      width: '26px',
-                      height: '26px',
-                      borderRadius: '8px',
-                      backgroundColor: mod.color2,
-                      opacity: 0.25,
-                      top: '2px',
-                      right: '2px'
-                    }}></div>
-                    <IconComp size={28} color={mod.color1} strokeWidth={2.2} />
-                  </div>
+                  <IconComp 
+                    size={22} 
+                    color={isActive ? '#FFFFFF' : 'var(--color-accent)'} 
+                    strokeWidth={2} 
+                  />
                 </div>
-                <span className="app-tile-label">{mod.label}</span>
+
+                <div className="app-tile-info">
+                  <div className="app-tile-header">
+                    <span className="app-tile-label">{mod.label}</span>
+                    {isActive && (
+                      <span className="app-tile-active-badge">Active</span>
+                    )}
+                  </div>
+                  <span className="app-tile-sub">{mod.sub}</span>
+                </div>
               </button>
             );
           })}
         </div>
 
-        {/* 5.5 Toggle + Link Row */}
+        {/* Action & Filter Bar (Status colors reserved strictly for real states) */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginTop: '40px',
+          marginTop: '36px',
           paddingTop: '20px',
-          borderTop: '1px solid #E2E2EA',
+          borderTop: '1px solid var(--color-border)',
           fontSize: '14px',
-          color: 'var(--color-text-body)'
+          color: 'var(--color-text-body)',
+          flexWrap: 'wrap',
+          gap: '16px'
         }}>
-          {/* Toggle on Left */}
+          {/* Real State Warning Filter */}
           <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', userSelect: 'none' }}>
             <div 
               onClick={() => onToggleLowStock(!showLowStockOnly)}
               style={{
-                width: '44px',
+                width: '42px',
                 height: '24px',
                 borderRadius: '9999px',
-                backgroundColor: showLowStockOnly ? 'var(--color-primary)' : '#CBD5E1',
+                backgroundColor: showLowStockOnly ? 'var(--color-accent)' : '#CBD5E1',
                 position: 'relative',
                 transition: 'background-color 0.2s'
               }}
@@ -176,29 +153,35 @@ export default function AppGridLauncher({ activeModule, onSelectModule, showLowS
                 backgroundColor: '#FFFFFF',
                 position: 'absolute',
                 top: '3px',
-                left: showLowStockOnly ? '23px' : '3px',
+                left: showLowStockOnly ? '21px' : '3px',
                 transition: 'left 0.2s',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.15)'
+                boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
               }} />
             </div>
-            <Sparkles size={16} color="var(--color-accent-orange)" />
-            <span style={{ fontWeight: '500' }}>Filter: Show low-stock items only</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              {showLowStockOnly ? (
+                <AlertTriangle size={15} color="var(--color-status-warning)" />
+              ) : null}
+              <span style={{ fontWeight: '500', color: showLowStockOnly ? 'var(--color-text-heading)' : 'var(--color-text-body)' }}>
+                Filter: Show items below reorder threshold
+              </span>
+            </div>
           </label>
 
-          {/* Plain Text Link on Right */}
+          {/* Plain Text Link to Audit Trail */}
           <a
-            href="#all-modules"
+            href="#ledger"
             onClick={(e) => { e.preventDefault(); onSelectModule('ledger'); }}
             style={{
-              color: 'var(--color-primary)',
+              color: 'var(--color-accent)',
               fontWeight: '600',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
-              gap: '4px'
+              gap: '6px'
             }}
           >
-            View full ledger move history <ArrowRight size={16} />
+            Audit full ledger transactions <ArrowRight size={15} />
           </a>
         </div>
 
